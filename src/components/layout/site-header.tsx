@@ -1,45 +1,38 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Github, Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/marketing/logo";
-import { nav, site } from "@/lib/site";
+import { nav } from "@/lib/site";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-8">
-          <Logo />
-          <nav className="hidden items-center gap-6 md:flex">
-            {nav.map((n) => (
-              <Link
-                key={n.to}
-                to={n.to}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                activeProps={{ className: "text-foreground" }}
-              >
-                {n.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
+    <header className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4">
+      <div className="pointer-events-auto flex w-full max-w-3xl items-center justify-between gap-2 rounded-full border border-border/60 bg-background/70 px-2 py-2 shadow-[var(--shadow-elevated)] backdrop-blur-xl">
+        <nav className="hidden items-center gap-1 pl-3 md:flex">
+          {nav.map((n) => (
+            <Link
+              key={n.to}
+              to={n.to}
+              className="rounded-full px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+              activeProps={{ className: "bg-muted/70 text-foreground" }}
+            >
+              {n.label}
+            </Link>
+          ))}
+        </nav>
         <div className="hidden items-center gap-2 md:flex">
-          <Button asChild variant="ghost" size="sm">
-            <a href={site.github} target="_blank" rel="noreferrer">
-              <Github className="mr-1 h-4 w-4" /> GitHub
-            </a>
+          <Button asChild variant="ghost" size="sm" className="rounded-full">
+            <Link to="/contact">Sign in</Link>
           </Button>
-          <Button asChild variant="outline" size="sm">
-            <Link to="/contact">Book demo</Link>
-          </Button>
-          <Button asChild size="sm" className="glow">
-            <Link to="/contact">Start free</Link>
+          <Button asChild size="sm" className="glow rounded-full">
+            <Link to="/contact">
+              Start free <ArrowRight className="ml-1 h-3.5 w-3.5" />
+            </Link>
           </Button>
         </div>
         <button
-          className="md:hidden"
+          className="ml-auto rounded-full p-2 md:hidden"
           aria-label="Toggle menu"
           onClick={() => setOpen((v) => !v)}
         >
@@ -47,8 +40,8 @@ export function SiteHeader() {
         </button>
       </div>
       {open && (
-        <div className="border-t border-border/40 bg-background/95 md:hidden">
-          <nav className="flex flex-col p-4">
+        <div className="pointer-events-auto fixed inset-x-4 top-20 rounded-2xl border border-border/60 bg-background/95 p-4 shadow-[var(--shadow-elevated)] backdrop-blur-xl md:hidden">
+          <nav className="flex flex-col">
             {nav.map((n) => (
               <Link
                 key={n.to}
@@ -60,10 +53,10 @@ export function SiteHeader() {
               </Link>
             ))}
             <div className="mt-3 flex flex-col gap-2">
-              <Button asChild variant="outline" size="sm">
-                <Link to="/contact">Book demo</Link>
+              <Button asChild variant="outline" size="sm" className="rounded-full">
+                <Link to="/contact">Sign in</Link>
               </Button>
-              <Button asChild size="sm">
+              <Button asChild size="sm" className="rounded-full">
                 <Link to="/contact">Start free</Link>
               </Button>
             </div>
