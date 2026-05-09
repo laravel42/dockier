@@ -10,7 +10,7 @@ export function Hero() {
       <div className="absolute inset-0 grid-bg" aria-hidden />
       <div className="absolute left-1/2 top-0 h-[600px] w-[1000px] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,oklch(0.78_0.14_180/15%),transparent_60%)]" aria-hidden />
       <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-24 sm:px-6 lg:px-8 lg:pb-24 lg:pt-32">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-4xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -24,10 +24,10 @@ export function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="font-display mt-6 text-4xl font-semibold leading-[1.05] tracking-tight text-gradient sm:text-6xl lg:text-7xl"
+            className="font-display mt-6 text-3xl font-semibold leading-[1.05] tracking-tight text-gradient sm:text-5xl lg:text-6xl"
           >
             AI-native DevSecOps for{" "}
-            <span className="text-gradient-primary">modern engineering teams</span>
+            <span className="text-gradient-primary whitespace-nowrap">modern engineering teams</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
