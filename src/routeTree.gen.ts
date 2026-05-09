@@ -29,6 +29,7 @@ import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/ap
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app/index'
 import { Route as AuthenticatedAppSecurityRouteImport } from './routes/_authenticated/app/security'
 import { Route as AuthenticatedAppProjectsRouteImport } from './routes/_authenticated/app/projects'
+import { Route as AuthenticatedAppDeployRouteImport } from './routes/_authenticated/app/deploy'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -131,6 +132,11 @@ const AuthenticatedAppProjectsRoute =
     path: '/projects',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppDeployRoute = AuthenticatedAppDeployRouteImport.update({
+  id: '/deploy',
+  path: '/deploy',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -149,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/app/deploy': typeof AuthenticatedAppDeployRoute
   '/app/projects': typeof AuthenticatedAppProjectsRoute
   '/app/security': typeof AuthenticatedAppSecurityRoute
   '/app/': typeof AuthenticatedAppIndexRoute
@@ -169,6 +176,7 @@ export interface FileRoutesByTo {
   '/security': typeof SecurityRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/app/deploy': typeof AuthenticatedAppDeployRoute
   '/app/projects': typeof AuthenticatedAppProjectsRoute
   '/app/security': typeof AuthenticatedAppSecurityRoute
   '/app': typeof AuthenticatedAppIndexRoute
@@ -192,6 +200,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/app/deploy': typeof AuthenticatedAppDeployRoute
   '/_authenticated/app/projects': typeof AuthenticatedAppProjectsRoute
   '/_authenticated/app/security': typeof AuthenticatedAppSecurityRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
@@ -215,6 +224,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app'
     | '/dashboard'
+    | '/app/deploy'
     | '/app/projects'
     | '/app/security'
     | '/app/'
@@ -235,6 +245,7 @@ export interface FileRouteTypes {
     | '/security'
     | '/signup'
     | '/dashboard'
+    | '/app/deploy'
     | '/app/projects'
     | '/app/security'
     | '/app'
@@ -257,6 +268,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authenticated/app'
     | '/_authenticated/dashboard'
+    | '/_authenticated/app/deploy'
     | '/_authenticated/app/projects'
     | '/_authenticated/app/security'
     | '/_authenticated/app/'
@@ -422,16 +434,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppProjectsRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/deploy': {
+      id: '/_authenticated/app/deploy'
+      path: '/deploy'
+      fullPath: '/app/deploy'
+      preLoaderRoute: typeof AuthenticatedAppDeployRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
   }
 }
 
 interface AuthenticatedAppRouteChildren {
+  AuthenticatedAppDeployRoute: typeof AuthenticatedAppDeployRoute
   AuthenticatedAppProjectsRoute: typeof AuthenticatedAppProjectsRoute
   AuthenticatedAppSecurityRoute: typeof AuthenticatedAppSecurityRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
+  AuthenticatedAppDeployRoute: AuthenticatedAppDeployRoute,
   AuthenticatedAppProjectsRoute: AuthenticatedAppProjectsRoute,
   AuthenticatedAppSecurityRoute: AuthenticatedAppSecurityRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
