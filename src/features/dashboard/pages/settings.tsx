@@ -412,9 +412,18 @@ function SourceFormDialog({ initial, onSaved, trigger }: { initial?: SourceRow; 
             <Switch checked={connected} onCheckedChange={setConnected} />
           </div>
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={submit} disabled={saving}>{saving ? "Saving…" : "Save"}</Button>
+        <DialogFooter className="sm:justify-between">
+          {initial ? (
+            <Button variant="ghost" className="text-destructive" onClick={async () => {
+              const { error } = await supabase.from("source_connections").delete().eq("id", initial.id);
+              if (error) return toast.error(error.message);
+              toast.success("Removed"); setOpen(false); onSaved();
+            }}><Trash2 className="h-3.5 w-3.5" /> Delete</Button>
+          ) : <span />}
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button onClick={submit} disabled={saving}>{saving ? "Saving…" : "Save"}</Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
