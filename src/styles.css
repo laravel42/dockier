@@ -64,6 +64,30 @@
 :root {
   /* Dockier — dark-first design tokens */
   --radius: 0.75rem;
+  /* Typography scale — single source of truth, tweak for global density */
+  --fs-body: 0.9375rem;       /* 15px */
+  --lh-body: 1.55;
+  --measure: 68ch;             /* readable line length */
+  --fs-small: 0.8125rem;       /* 13px */
+  --fs-button: 0.8125rem;      /* 13px */
+  --fs-button-sm: 0.75rem;
+  --fs-button-lg: 0.875rem;
+  --fs-mono-label: 0.6875rem;  /* 11px */
+  --fs-display: 3rem;          /* 48px */
+  --fs-h1: 2.25rem;            /* 36px */
+  --fs-h2: 1.75rem;            /* 28px */
+  --fs-h3: 1.375rem;           /* 22px */
+  --fs-h4: 1.0625rem;          /* 17px */
+  --fs-h5: 0.875rem;
+  --fs-h6: 0.75rem;
+  --lh-tight: 1.05;
+  --lh-snug: 1.18;
+  --lh-heading: 1.25;
+  --tracking-display: -0.04em;
+  --tracking-heading: -0.025em;
+  --tracking-eyebrow: 0.08em;
+  --space-section-y: 3rem;
+  --space-heading-mb: 0.75rem;
   /* Restrained graphite base with a muted sand/ochre accent — sober, editorial, distinct from Amedeus mint */
   --background: oklch(0.17 0.008 50);
   --foreground: oklch(0.95 0.008 60);
@@ -111,6 +135,35 @@
   --sidebar-accent-foreground: oklch(0.95 0.008 60);
   --sidebar-border: oklch(0.32 0.008 50 / 60%);
   --sidebar-ring: oklch(0.78 0.08 70);
+}
+
+/* Responsive scale — tighten on mobile, expand on large screens */
+@media (min-width: 640px) {
+  :root {
+    --fs-display: 3.75rem;
+    --fs-h1: 2.75rem;
+    --fs-h2: 2.125rem;
+    --space-section-y: 4rem;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --fs-display: 4.75rem;
+    --fs-h1: 3.25rem;
+    --fs-h2: 2.5rem;
+    --fs-h3: 1.5rem;
+    --fs-body: 0.9375rem;
+    --space-section-y: 5rem;
+  }
+}
+@media (min-width: 1536px) {
+  :root {
+    --fs-display: 5.5rem;
+    --fs-h1: 3.75rem;
+    --fs-h2: 2.75rem;
+    --fs-body: 1rem;
+    --space-section-y: 6rem;
+  }
 }
 
 .dark {
