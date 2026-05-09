@@ -1,4 +1,5 @@
-import { ShieldCheck, RefreshCw } from "lucide-react";
+import { ShieldCheck, RefreshCw, ChevronRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PageHeader } from "@/features/dashboard/components/page-header";
@@ -53,11 +54,13 @@ export function SecurityPage() {
           </div>
           <ul>
             {scans.map((s) => (
-              <li
-                key={s.id}
-                className="grid grid-cols-12 items-center gap-2 border-b border-border/40 px-5 py-3 transition-colors last:border-0 hover:bg-muted/30"
-              >
-                <div className="col-span-4 flex items-center gap-2">
+              <li key={s.id} className="border-b border-border/40 last:border-0">
+                <Link
+                  to="/app/security/$scanId"
+                  params={{ scanId: s.id }}
+                  className="grid grid-cols-12 items-center gap-2 px-5 py-3 transition-colors hover:bg-muted/30"
+                >
+                  <div className="col-span-4 flex items-center gap-2">
                   <ShieldCheck className="h-3.5 w-3.5 text-primary" />
                   <span className="truncate text-sm font-medium">{projectMap[s.projectId]?.name ?? s.repo}</span>
                 </div>
@@ -75,9 +78,11 @@ export function SecurityPage() {
                   {s.summary.medium > 0 && <SeverityBadge severity="medium" count={s.summary.medium} />}
                   {s.summary.low > 0 && <SeverityBadge severity="low" count={s.summary.low} />}
                 </div>
-                <div className="col-span-1 text-right text-[11px] text-muted-foreground">
-                  {new Date(s.createdAt).toLocaleDateString()}
-                </div>
+                  <div className="col-span-1 flex items-center justify-end gap-1 text-[11px] text-muted-foreground">
+                    {new Date(s.createdAt).toLocaleDateString("en-GB")}
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </div>
+                </Link>
               </li>
             ))}
           </ul>

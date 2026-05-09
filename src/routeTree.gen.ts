@@ -33,6 +33,7 @@ import { Route as AuthenticatedAppProjectsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAppNotificationsRouteImport } from './routes/_authenticated/app/notifications'
 import { Route as AuthenticatedAppDeployRouteImport } from './routes/_authenticated/app/deploy'
 import { Route as AuthenticatedAppProjectsIndexRouteImport } from './routes/_authenticated/app/projects.index'
+import { Route as AuthenticatedAppSecurityScanIdRouteImport } from './routes/_authenticated/app/security.$scanId'
 import { Route as AuthenticatedAppProjectsProjectIdRouteImport } from './routes/_authenticated/app/projects.$projectId'
 
 const SignupRoute = SignupRouteImport.update({
@@ -159,6 +160,12 @@ const AuthenticatedAppProjectsIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedAppProjectsRoute,
   } as any)
+const AuthenticatedAppSecurityScanIdRoute =
+  AuthenticatedAppSecurityScanIdRouteImport.update({
+    id: '/$scanId',
+    path: '/$scanId',
+    getParentRoute: () => AuthenticatedAppSecurityRoute,
+  } as any)
 const AuthenticatedAppProjectsProjectIdRoute =
   AuthenticatedAppProjectsProjectIdRouteImport.update({
     id: '/$projectId',
@@ -186,10 +193,11 @@ export interface FileRoutesByFullPath {
   '/app/deploy': typeof AuthenticatedAppDeployRoute
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/projects': typeof AuthenticatedAppProjectsRouteWithChildren
-  '/app/security': typeof AuthenticatedAppSecurityRoute
+  '/app/security': typeof AuthenticatedAppSecurityRouteWithChildren
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app/': typeof AuthenticatedAppIndexRoute
   '/app/projects/$projectId': typeof AuthenticatedAppProjectsProjectIdRoute
+  '/app/security/$scanId': typeof AuthenticatedAppSecurityScanIdRoute
   '/app/projects/': typeof AuthenticatedAppProjectsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -210,10 +218,11 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/app/deploy': typeof AuthenticatedAppDeployRoute
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
-  '/app/security': typeof AuthenticatedAppSecurityRoute
+  '/app/security': typeof AuthenticatedAppSecurityRouteWithChildren
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app': typeof AuthenticatedAppIndexRoute
   '/app/projects/$projectId': typeof AuthenticatedAppProjectsProjectIdRoute
+  '/app/security/$scanId': typeof AuthenticatedAppSecurityScanIdRoute
   '/app/projects': typeof AuthenticatedAppProjectsIndexRoute
 }
 export interface FileRoutesById {
@@ -238,10 +247,11 @@ export interface FileRoutesById {
   '/_authenticated/app/deploy': typeof AuthenticatedAppDeployRoute
   '/_authenticated/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/_authenticated/app/projects': typeof AuthenticatedAppProjectsRouteWithChildren
-  '/_authenticated/app/security': typeof AuthenticatedAppSecurityRoute
+  '/_authenticated/app/security': typeof AuthenticatedAppSecurityRouteWithChildren
   '/_authenticated/app/settings': typeof AuthenticatedAppSettingsRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
   '/_authenticated/app/projects/$projectId': typeof AuthenticatedAppProjectsProjectIdRoute
+  '/_authenticated/app/security/$scanId': typeof AuthenticatedAppSecurityScanIdRoute
   '/_authenticated/app/projects/': typeof AuthenticatedAppProjectsIndexRoute
 }
 export interface FileRouteTypes {
@@ -270,6 +280,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/'
     | '/app/projects/$projectId'
+    | '/app/security/$scanId'
     | '/app/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -294,6 +305,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app'
     | '/app/projects/$projectId'
+    | '/app/security/$scanId'
     | '/app/projects'
   id:
     | '__root__'
@@ -321,6 +333,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/settings'
     | '/_authenticated/app/'
     | '/_authenticated/app/projects/$projectId'
+    | '/_authenticated/app/security/$scanId'
     | '/_authenticated/app/projects/'
   fileRoutesById: FileRoutesById
 }
@@ -512,6 +525,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppProjectsIndexRouteImport
       parentRoute: typeof AuthenticatedAppProjectsRoute
     }
+    '/_authenticated/app/security/$scanId': {
+      id: '/_authenticated/app/security/$scanId'
+      path: '/$scanId'
+      fullPath: '/app/security/$scanId'
+      preLoaderRoute: typeof AuthenticatedAppSecurityScanIdRouteImport
+      parentRoute: typeof AuthenticatedAppSecurityRoute
+    }
     '/_authenticated/app/projects/$projectId': {
       id: '/_authenticated/app/projects/$projectId'
       path: '/$projectId'
@@ -539,11 +559,25 @@ const AuthenticatedAppProjectsRouteWithChildren =
     AuthenticatedAppProjectsRouteChildren,
   )
 
+interface AuthenticatedAppSecurityRouteChildren {
+  AuthenticatedAppSecurityScanIdRoute: typeof AuthenticatedAppSecurityScanIdRoute
+}
+
+const AuthenticatedAppSecurityRouteChildren: AuthenticatedAppSecurityRouteChildren =
+  {
+    AuthenticatedAppSecurityScanIdRoute: AuthenticatedAppSecurityScanIdRoute,
+  }
+
+const AuthenticatedAppSecurityRouteWithChildren =
+  AuthenticatedAppSecurityRoute._addFileChildren(
+    AuthenticatedAppSecurityRouteChildren,
+  )
+
 interface AuthenticatedAppRouteChildren {
   AuthenticatedAppDeployRoute: typeof AuthenticatedAppDeployRoute
   AuthenticatedAppNotificationsRoute: typeof AuthenticatedAppNotificationsRoute
   AuthenticatedAppProjectsRoute: typeof AuthenticatedAppProjectsRouteWithChildren
-  AuthenticatedAppSecurityRoute: typeof AuthenticatedAppSecurityRoute
+  AuthenticatedAppSecurityRoute: typeof AuthenticatedAppSecurityRouteWithChildren
   AuthenticatedAppSettingsRoute: typeof AuthenticatedAppSettingsRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
 }
@@ -552,7 +586,7 @@ const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppDeployRoute: AuthenticatedAppDeployRoute,
   AuthenticatedAppNotificationsRoute: AuthenticatedAppNotificationsRoute,
   AuthenticatedAppProjectsRoute: AuthenticatedAppProjectsRouteWithChildren,
-  AuthenticatedAppSecurityRoute: AuthenticatedAppSecurityRoute,
+  AuthenticatedAppSecurityRoute: AuthenticatedAppSecurityRouteWithChildren,
   AuthenticatedAppSettingsRoute: AuthenticatedAppSettingsRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
 }

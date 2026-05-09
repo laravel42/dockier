@@ -152,3 +152,158 @@ export const projectDescriptions: Record<string, string> = {
   p4: "Terraform definitions for staging and production: VPC, RDS, S3, CloudFront, IAM. Reviewed via PR with policy-as-code checks.",
   p5: "Search indexer that ingests scan findings into the OpenSearch cluster with sharded parallel pipelines. Rust + Tokio.",
 };
+
+export interface Finding {
+  id: string;
+  scanId: string;
+  severity: Severity;
+  title: string;
+  rule: string;
+  category: "secrets" | "injection" | "auth" | "crypto" | "config" | "deps" | "logic";
+  file: string;
+  line: number;
+  cwe?: string;
+  description: string;
+  remediation: string;
+  snippet: string;
+  status: "open" | "fixed" | "ignored";
+}
+
+export const findingsByScan: Record<string, Finding[]> = {
+  s1: [
+    {
+      id: "f1", scanId: "s1", severity: "critical", title: "Hardcoded JWT signing secret",
+      rule: "secrets/hardcoded-jwt", category: "secrets", file: "src/lib/auth.ts", line: 14, cwe: "CWE-798",
+      description: "A JWT signing secret is committed to source. Anyone with repo access can mint valid tokens for any user.",
+      remediation: "Move the secret into an environment variable and rotate the existing key. Add the env var to your deployment provider.",
+      snippet: "const JWT_SECRET = \"super-prod-secret-2024\";",
+      status: "open",
+    },
+    {
+      id: "f2", scanId: "s1", severity: "high", title: "SQL string concatenation in search",
+      rule: "injection/sql-concat", category: "injection", file: "src/server/search.ts", line: 87, cwe: "CWE-89",
+      description: "User-controlled input is concatenated into a SQL query, exposing the search endpoint to SQL injection.",
+      remediation: "Use parameterised queries via the postgres client's tagged template form.",
+      snippet: "await sql(`SELECT * FROM posts WHERE title LIKE '%${q}%'`);",
+      status: "open",
+    },
+    {
+      id: "f3", scanId: "s1", severity: "high", title: "Missing CSRF protection on POST handler",
+      rule: "auth/missing-csrf", category: "auth", file: "src/routes/api/comments.ts", line: 22,
+      description: "The mutation endpoint does not verify origin or a CSRF token, allowing cross-site requests to forge actions.",
+      remediation: "Validate the Origin header against an allow-list or require a double-submit CSRF token.",
+      snippet: "POST: async ({ request }) => { /* no origin check */ }",
+      status: "open",
+    },
+    {
+      id: "f4", scanId: "s1", severity: "high", title: "Weak password hashing (MD5)",
+      rule: "crypto/weak-hash", category: "crypto", file: "src/server/users.ts", line: 41, cwe: "CWE-327",
+      description: "Passwords are hashed with MD5, which is fast and broken. Stolen hashes can be cracked in minutes.",
+      remediation: "Use argon2id (preferred) or bcrypt with a cost factor of at least 12.",
+      snippet: "const hash = createHash('md5').update(password).digest('hex');",
+      status: "open",
+    },
+    {
+      id: "f5", scanId: "s1", severity: "medium", title: "Permissive CORS allow-origin",
+      rule: "config/cors-wildcard", category: "config", file: "src/server.ts", line: 18,
+      description: "Access-Control-Allow-Origin is set to '*' alongside credentials, leaking authenticated responses to any origin.",
+      remediation: "Restrict the allow-list to known front-end origins and reflect a single value per request.",
+      snippet: "headers: { 'Access-Control-Allow-Origin': '*' }",
+      status: "open",
+    },
+    {
+      id: "f6", scanId: "s1", severity: "medium", title: "Vulnerable dependency: lodash 4.17.20",
+      rule: "deps/known-cve", category: "deps", file: "package.json", line: 31, cwe: "CWE-1104",
+      description: "lodash 4.17.20 is affected by CVE-2021-23337 (command injection via template).",
+      remediation: "Bump lodash to 4.17.21 or later, or replace with native equivalents.",
+      snippet: "\"lodash\": \"4.17.20\"",
+      status: "open",
+    },
+    {
+      id: "f7", scanId: "s1", severity: "medium", title: "Insecure cookie: missing Secure flag",
+      rule: "config/insecure-cookie", category: "config", file: "src/server/session.ts", line: 9,
+      description: "Session cookie is set without Secure, allowing it to leak over plaintext HTTP.",
+      remediation: "Set { secure: true, httpOnly: true, sameSite: 'lax' } on the cookie.",
+      snippet: "setCookie('sid', token, { httpOnly: true })",
+      status: "open",
+    },
+    {
+      id: "f8", scanId: "s1", severity: "medium", title: "Verbose error responses",
+      rule: "logic/error-leak", category: "logic", file: "src/server/index.ts", line: 102,
+      description: "Stack traces are returned in API error responses, exposing file paths and library versions.",
+      remediation: "Return a generic error message in production and log full traces server-side only.",
+      snippet: "return Response.json({ error: err.stack });",
+      status: "open",
+    },
+    {
+      id: "f9", scanId: "s1", severity: "low", title: "Missing X-Content-Type-Options header",
+      rule: "config/missing-header", category: "config", file: "src/server.ts", line: 12,
+      description: "Responses do not set X-Content-Type-Options: nosniff, allowing MIME-sniffing attacks.",
+      remediation: "Add the nosniff header in your default response headers.",
+      snippet: "// no security headers configured",
+      status: "open",
+    },
+    {
+      id: "f10", scanId: "s1", severity: "low", title: "TODO comment with credentials hint",
+      rule: "secrets/todo-credentials", category: "secrets", file: "src/server/legacy.ts", line: 4,
+      description: "A TODO references hardcoded staging credentials. Even if removed, the hint helps targeted attacks.",
+      remediation: "Delete the comment and audit git history for any leaked secrets.",
+      snippet: "// TODO: use real creds, staging is admin/admin",
+      status: "open",
+    },
+    {
+      id: "f11", scanId: "s1", severity: "low", title: "Console logging of request bodies",
+      rule: "logic/log-pii", category: "logic", file: "src/server/middleware.ts", line: 27,
+      description: "Request bodies are logged at info level, potentially storing PII in plaintext logs.",
+      remediation: "Redact known sensitive fields (email, password, token) before logging.",
+      snippet: "console.log('req', JSON.stringify(req.body));",
+      status: "open",
+    },
+  ],
+  s2: [
+    {
+      id: "f20", scanId: "s2", severity: "high", title: "Open redirect via 'next' query param",
+      rule: "auth/open-redirect", category: "auth", file: "src/routes/login.tsx", line: 38, cwe: "CWE-601",
+      description: "After login, the user is redirected to an arbitrary URL provided in the query string.",
+      remediation: "Validate that the redirect target is a relative path or matches an allow-listed origin.",
+      snippet: "window.location = searchParams.get('next');",
+      status: "open",
+    },
+    {
+      id: "f21", scanId: "s2", severity: "medium", title: "TLS verification disabled in HTTP client",
+      rule: "crypto/tls-disabled", category: "crypto", file: "src/server/upstream.ts", line: 12,
+      description: "Upstream HTTP client ignores certificate errors, exposing traffic to MITM.",
+      remediation: "Remove the rejectUnauthorized: false flag and pin the upstream CA if needed.",
+      snippet: "new https.Agent({ rejectUnauthorized: false })",
+      status: "open",
+    },
+    {
+      id: "f22", scanId: "s2", severity: "medium", title: "Rate limiter bypass on /auth",
+      rule: "logic/rate-bypass", category: "logic", file: "src/server/rate-limit.ts", line: 55,
+      description: "Rate limiter keys requests by IP only, allowing distributed brute-force attacks.",
+      remediation: "Combine IP with username and apply progressive delays after failed attempts.",
+      snippet: "const key = req.ip;",
+      status: "open",
+    },
+  ],
+  s3: [
+    {
+      id: "f30", scanId: "s3", severity: "medium", title: "Public S3 bucket policy",
+      rule: "config/s3-public", category: "config", file: "buckets.tf", line: 14,
+      description: "Bucket policy grants s3:GetObject to '*', exposing all objects to the internet.",
+      remediation: "Restrict the policy to known principals or use signed URLs.",
+      snippet: "principals { type = \"*\"; identifiers = [\"*\"] }",
+      status: "open",
+    },
+    {
+      id: "f31", scanId: "s3", severity: "low", title: "RDS without storage encryption",
+      rule: "config/rds-encryption", category: "config", file: "rds.tf", line: 22,
+      description: "RDS instance is created without storage_encrypted, leaving snapshots unencrypted at rest.",
+      remediation: "Set storage_encrypted = true and provide a KMS key.",
+      snippet: "resource \"aws_db_instance\" \"main\" { /* no encryption */ }",
+      status: "open",
+    },
+  ],
+  s4: [],
+  s5: [],
+};
