@@ -1,134 +1,107 @@
-## Dockier Marketing Site — Build Plan
+## Porting the dashboard into Dockier
 
-A premium, dark-first marketing site for Dockier positioned as the AI-native DevSecOps platform. Investor-ready, launch-ready, fully responsive, SEO-optimized.
+The uploaded archive is a full React Router v7 SPA (~195 files, 11 pages, contexts, sidebar layout, scan/deploy/project detail screens, settings tabs, deploy wizard with codemirror). Embedding it as-is would clash with the marketing site (notably the existing `/security` route) and bring in a parallel auth/theming/router stack. The plan is a clean port, not a copy-paste.
 
-### Stack note (important)
-Your brief specifies Next.js App Router, but this project is built on **TanStack Start** (the Lovable default full-stack React framework). I'll build the same site with equivalent capabilities:
-- TanStack Start file-based routing (replaces Next App Router)
-- TypeScript, Tailwind CSS v4, shadcn/ui — as requested
-- Framer Motion for animation — as requested
-- Per-route SSR `head()` metadata for SEO/OpenGraph (equivalent to Next metadata)
+### 1. Routing & namespace
 
-If you specifically need Next.js, say so and I'll flag that as a stack migration instead.
+Mount the entire dashboard under `/app/*` so it never collides with marketing routes (`/security`, `/pricing`, etc.):
 
----
-
-### Sitemap (TanStack routes under `src/routes/`)
-
-```
-/                  index.tsx          Landing
-/features          features.tsx       Full feature breakdown
-/product           product.tsx        Interactive product showcase
-/pricing           pricing.tsx        Plans + FAQ
-/security          security.tsx       Trust, compliance, architecture
-/docs              docs.tsx           Docs/resources hub
-/changelog         changelog.tsx      Release notes
-/blog              blog.tsx           Blog index (placeholder posts)
-/compare           compare.tsx        Vs Snyk / GHAS / SonarQube / GitLab
-/contact           contact.tsx        Demo request + email capture
+```text
+src/routes/
+  _authenticated.tsx                 (existing guard — keep)
+  _authenticated/
+    app.tsx                          layout with sidebar + topbar
+    app/
+      index.tsx                       → /app  (overview)
+      notifications.tsx               → /app/notifications
+      projects.tsx                    → /app/projects
+      projects.$projectId.tsx         → /app/projects/:id
+      security.tsx                    → /app/security
+      security.$scanId.tsx            → /app/security/:scanId
+      deploy.tsx                      → /app/deploy
+      deploy.$deployId.tsx            → /app/deploy/:id
+      settings.tsx                    → /app/settings (tabs layout)
 ```
 
-Each route gets distinct `head()` with title, description, og:title, og:description, twitter card. Single H1 per page. JSON-LD `Organization` + `SoftwareApplication` on `/`.
+The current placeholder `/dashboard` redirects to `/app`. Header "Dashboard" link points to `/app`.
 
----
+### 2. Replace the parallel stacks
 
-### Landing page sections (`/`)
+| Source dashboard | Replaced by |
+|---|---|
+| `react-router-dom` `<Link>`, `useNavigate`, `useParams` | `@tanstack/react-router` equivalents |
+| `AuthContext` | existing `useAuth` hook + Supabase session |
+| `ThemeContext` (light/dark toggle) | site already dark-first; expose a toggle via `next-themes` later if needed (out of scope here) |
+| `PermissionsContext` | thin pass-through hook returning `true` for now (server enforcement TBD) |
+| `Layout.tsx` + `Sidebar.tsx` + `Toolbar.tsx` | shadcn `Sidebar` (`SidebarProvider`, `SidebarTrigger`, collapsible icon mode) wired to TanStack `Link` + `useRouterState` |
 
-1. **Sticky nav** — logo, links (Product, Features, Pricing, Security, Docs, Compare), GitHub stars button, "Book demo", "Start free"
-2. **Hero** — headline "AI-native DevSecOps for modern engineering teams", subcopy, dual CTA, animated dashboard mockup with floating cards (scan findings, AI analysis snippet, deployment status), grid + gradient orb background
-3. **Trusted by** — marquee of provider/ecosystem logos (GitHub, GitLab, Bitbucket, AWS, GCP, Jira, Linear, Slack, Semgrep, SonarQube, OSV.dev) + 4 stat counters
-4. **Feature pillars** — 7 cards: AI Project Analysis, Security Scanning, Sensitive Data Detection, Dependency Intelligence, AI Remediation, Deployments, Team Collaboration
-5. **Interactive product showcase** — tabbed/scroll-pinned mockups mirroring uploaded screenshots (dashboard, scan results, project detail w/ overview tabs, settings security tools, new project modal)
-6. **How it works** — 4-step animated flow: Connect → Analyze & Scan → Fix with AI → Deploy
-7. **Developer experience** — terminal block, code snippets, "API-first / microservices / OpenAI / self-hostable" callouts
-8. **Comparison teaser** — condensed table → link to `/compare`
-9. **Pricing teaser** — 3 cards → link to `/pricing`
-10. **Security & trust strip** — compliance badges + link to `/security`
-11. **CTA footer band** — "Start securing your repositories with AI." + email capture + GitHub + Demo
-12. **Footer** — full sitemap, social, legal
+### 3. Re-skin to the marketing system
 
----
+- Drop the dashboard's `index.css` `@theme` block. All tokens come from `src/styles.css` (background, primary cyan/teal, surface, severity, gradient-primary, shadow-elegant).
+- Replace ad-hoc `bg-card`, `text-text-secondary`, `border-border` color names with the site's semantic tokens (`bg-card`, `text-muted-foreground`, `border-border` already match — minimal renaming).
+- Fonts: keep Space Grotesk display + Inter Tight body (already loaded). Drop Fraunces references.
+- Swap primitives:
+  - `<button>` → `Button` (variants: default, outline, ghost, destructive)
+  - cards → `Card`, `CardHeader`, `CardContent`
+  - badges → `Badge` (with `severity` variant added)
+  - tabs (Settings, ScanDetail) → `Tabs` from shadcn
+  - modals (FixWithAI, CreateIssue, ConfirmModal) → `Dialog`
+  - selects/comboboxes → `Select` / `Command`
+- Rebuild `SeverityBadge`, `TechBadge`, `ProviderBadge`, `PlatformBadge`, `SourceControlBadge` on top of `Badge` with severity color tokens (`--sev-critical`, `--sev-high`, …).
 
-### Component architecture
+### 4. Heavy dependencies
 
-```
-src/
-  routes/                     page routes (above)
+Install these as part of the port:
+- `@xyflow/react` — used by the deploy graph view
+- `@uiw/react-md-editor` + `prismjs` — markdown editor in scan/findings
+- `@codemirror/*` + `react-simple-code-editor` — env vars / compose editor in DeployWizard
+
+If any of these turn out to be SSR-incompatible they'll be lazy-loaded with `React.lazy` + a client-only wrapper.
+
+### 5. Data layer
+
+The original app calls a backend that doesn't exist here. To keep the port runnable:
+- All pages start with mock fixtures defined alongside the component (e.g. `src/features/dashboard/fixtures/projects.ts`).
+- A thin `src/features/dashboard/api.ts` exposes typed functions returning the fixtures via `Promise.resolve(...)`. Replacing fixtures with real Supabase queries later only touches that file.
+- No new database schema in this pass.
+
+### 6. Folder layout in this project
+
+```text
+src/features/dashboard/
+  layout/
+    AppSidebar.tsx
+    AppTopbar.tsx
   components/
-    layout/
-      site-header.tsx
-      site-footer.tsx
-      mobile-nav.tsx
-    marketing/
-      hero.tsx
-      dashboard-mockup.tsx        floating UI cards, glow
-      logo-marquee.tsx
-      stat-counter.tsx
-      feature-grid.tsx
-      feature-card.tsx
-      product-showcase.tsx        tabbed screenshots
-      how-it-works.tsx
-      dx-section.tsx              terminal + code
-      comparison-table.tsx
-      pricing-cards.tsx
-      cta-band.tsx
-      faq.tsx
-    primitives/
-      glow-orb.tsx
-      grid-bg.tsx
-      gradient-border.tsx
-      terminal-block.tsx
-      severity-badge.tsx
-      scan-finding-card.tsx
-      glass-panel.tsx
-      section.tsx
-    ui/                        shadcn (existing)
-  lib/
-    seo.ts                     head() helper
-    site.ts                    nav, pricing, features data
-  assets/                      generated illustrations + logo
+    SeverityBadge.tsx, TechBadge.tsx, ProviderBadge.tsx, ...
+  pages/
+    Overview.tsx, Projects.tsx, ProjectDetail.tsx,
+    Security.tsx, ScanDetail.tsx,
+    Deploy.tsx, DeployDetail.tsx,
+    Notifications.tsx, Settings.tsx,
+    settings/{Profile,Users,Roles,Providers,Integrations,SourceControl,SshKeys,Security,SecurityRules,NotificationChannels}Tab.tsx
+  fixtures/
+    projects.ts, scans.ts, deploys.ts, users.ts, integrations.ts
+  api.ts
 ```
 
----
+Route files in `src/routes/_authenticated/app/*` stay tiny — they just import from `src/features/dashboard/pages` and set `head()` metadata.
 
-### Design system (`src/styles.css`)
+### 7. Out of scope (this pass)
 
-Tokens (oklch), all dark-first with light fallback:
-- `--background` deep navy/near-black, `--surface` glass panel, `--surface-elev`
-- `--primary` teal/cyan accent, `--primary-glow` brighter cyan for glows
-- Severity: `--sev-critical`, `--sev-high`, `--sev-medium`, `--sev-low`, `--sev-info`
-- Gradients: `--gradient-hero`, `--gradient-border`, `--gradient-primary`
-- Shadows: `--shadow-glow`, `--shadow-elevated`, `--shadow-panel`
-- Radii scale, spacing rhythm
+- Real backend wiring (kept on fixtures so the UI is interactive end-to-end).
+- DeployWizard's full step flow with live env detection — port the shell and "review/deploy" step; the wizard's environment detection that hits a backend stays mocked.
+- Light-mode parity — the marketing site is dark-first; dashboard renders dark-only for now.
+- Realtime / websocket scan progress.
 
-Typography:
-- Display: a distinctive serif-display pairing (e.g., Fraunces) for hero/H1 to mirror the "Welcome back / Dockier" wordmark feel from your screenshots
-- UI/body: Geist or Inter Tight
-- Mono: JetBrains Mono for terminals/code
+### 8. Sequencing
 
-Reusable variants (cva): `Button` (primary glow / ghost / outline / link), `Card` (glass / bordered-glow), `Badge` (severity), `Tab` (pill underlined).
+1. Add `/app` route shell + sidebar/topbar (shadcn `Sidebar`), redirect `/dashboard` → `/app`.
+2. Port primitives (badges, severity, tech, provider) onto shadcn `Badge` + tokens.
+3. Port pages in this order: Overview → Projects (+ detail) → Security (+ scan detail) → Deploy (+ detail) → Notifications → Settings (with all tabs).
+4. Install heavy deps (`@xyflow/react`, codemirror, md-editor) only when their consuming page is being ported.
+5. Verify each ported page renders at its `/app/...` URL with auth guard active.
 
-Motion guidelines (Framer Motion):
-- Page section reveal: fade+rise 12px, 400ms, ease-out, stagger 60ms
-- Hero mockup: floating cards y±8px loop, glow pulse 4s
-- Hover: scale 1.02 + glow on primary surfaces
-- Respect `prefers-reduced-motion`
+### Why this scope
 
----
-
-### Visuals
-- Generate logo (D mark with crescent, teal) and a few hero/dashboard illustration assets via image gen (transparent PNGs for logo, JPG for hero panels). Mockups for screenshots will be styled HTML/CSS recreations of the uploaded UI rather than using the raw uploads.
-
-### SEO
-- Per-route `head()`, single H1, semantic landmarks, alt text, canonical, JSON-LD on `/`, sitemap.xml + robots.txt in `public/`, OG image generated per page family.
-
-### Accessibility
-- WCAG AA contrast in dark theme, focus-visible rings (teal), keyboard-navigable nav/tabs, aria-labels on icon buttons, reduced-motion fallback, skip-to-content.
-
-### Out of scope (this pass)
-- Real auth, waitlist persistence (form posts to a stub server function returning success), CMS for blog/changelog (static placeholder entries), live GitHub stars (static number).
-
----
-
-### Deliverable
-A complete, production-shaped marketing site you can publish immediately, with all 10 pages scaffolded, the landing page fully designed and animated, and a documented design system ready to extend.
+A faithful port of 195 source files re-skinned to shadcn is multi-thousand-line work. I'll execute it page-by-page across follow-up turns rather than one giant patch, so you can review and steer each section. This plan locks the architecture (routing, primitives, fixture data) so nothing has to be redone later.
