@@ -16,7 +16,7 @@ import { PageHeader } from "@/features/dashboard/components/page-header";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Cloud, KeyRound, GitBranch, Plus, Trash2, RefreshCw, Pencil, ShieldCheck } from "lucide-react";
+import { Cloud, KeyRound, GitBranch, Plus, Trash2, RefreshCw, ShieldCheck } from "lucide-react";
 
 type AppRole = "admin" | "moderator" | "user";
 
@@ -29,7 +29,7 @@ interface ProfileRow {
 interface RoleRow { id: string; user_id: string; role: AppRole }
 interface CloudRow { id: string; name: string; kind: string; region: string | null; connected: boolean }
 interface SourceRow { id: string; name: string; provider: string; account: string | null; connected: boolean }
-interface SshRow { id: string; name: string; fingerprint: string; public_key: string | null }
+interface SshRow { id: string; name: string; fingerprint: string; public_key: string | null; created_at: string }
 
 const cloudKinds = ["AWS", "Google Cloud", "Azure", "Fly.io", "DigitalOcean", "Hetzner"];
 const sourceProvidersList = ["GitHub", "GitLab", "Bitbucket", "Gitea"];
@@ -194,20 +194,12 @@ export function SettingsPage() {
                       <p className="truncate text-xs text-muted-foreground">{c.kind}{c.region ? ` • ${c.region}` : ""}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Badge variant={c.connected ? "default" : "outline"} className="text-[10px]">
-                      {c.connected ? "Connected" : "Disconnected"}
-                    </Badge>
-                    {isAdmin && (
-                      <>
-                        <CloudFormDialog initial={c} onSaved={loadAll} trigger={<Button size="icon" variant="ghost" className="h-7 w-7"><Pencil className="h-3.5 w-3.5" /></Button>} />
-                        <Button size="icon" variant="ghost" className="h-7 w-7" onClick={async () => {
-                          const { error } = await supabase.from("cloud_providers").delete().eq("id", c.id);
-                          if (error) toast.error(error.message); else { toast.success("Removed"); loadAll(); }
-                        }}><Trash2 className="h-3.5 w-3.5" /></Button>
-                      </>
-                    )}
-                  </div>
+                  {isAdmin ? (
+                    <CloudFormDialog initial={c} onSaved={loadAll}
+                      trigger={<Button size="sm" variant={c.connected ? "outline" : "default"}>{c.connected ? "Manage" : "Connect"}</Button>} />
+                  ) : (
+                    <Button size="sm" variant={c.connected ? "outline" : "default"} disabled>{c.connected ? "Manage" : "Connect"}</Button>
+                  )}
                 </div>
               ))}
             </CardContent>
@@ -227,24 +219,7 @@ export function SettingsPage() {
             <CardContent className="space-y-2">
               {sshKeys.length === 0 && <p className="text-sm text-muted-foreground">No SSH keys yet.</p>}
               {sshKeys.map((k) => (
-                <div key={k.id} className="flex items-center justify-between rounded-lg border border-border/50 bg-muted/20 px-4 py-3">
-                  <div className="flex min-w-0 items-center gap-3">
-                    <KeyRound className="h-4 w-4 text-muted-foreground" />
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">{k.name}</p>
-                      <p className="truncate font-mono text-xs text-muted-foreground">{k.fingerprint}</p>
-                    </div>
-                  </div>
-                  {isAdmin && (
-                    <div className="flex items-center gap-1">
-                      <SshFormDialog initial={k} onSaved={loadAll} trigger={<Button size="icon" variant="ghost" className="h-7 w-7"><Pencil className="h-3.5 w-3.5" /></Button>} />
-                      <Button size="icon" variant="ghost" className="h-7 w-7" onClick={async () => {
-                        const { error } = await supabase.from("ssh_keys").delete().eq("id", k.id);
-                        if (error) toast.error(error.message); else { toast.success("Removed"); loadAll(); }
-                      }}><Trash2 className="h-3.5 w-3.5" /></Button>
-                    </div>
-                  )}
-                </div>
+                <SshRowItem key={k.id} k={k} isAdmin={isAdmin} onSaved={loadAll} />
               ))}
             </CardContent>
           </Card>
@@ -271,20 +246,12 @@ export function SettingsPage() {
                       <p className="truncate text-xs text-muted-foreground">{s.provider}{s.account ? ` • ${s.account}` : ""}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Badge variant={s.connected ? "default" : "outline"} className="text-[10px]">
-                      {s.connected ? "Connected" : "Disconnected"}
-                    </Badge>
-                    {isAdmin && (
-                      <>
-                        <SourceFormDialog initial={s} onSaved={loadAll} trigger={<Button size="icon" variant="ghost" className="h-7 w-7"><Pencil className="h-3.5 w-3.5" /></Button>} />
-                        <Button size="icon" variant="ghost" className="h-7 w-7" onClick={async () => {
-                          const { error } = await supabase.from("source_connections").delete().eq("id", s.id);
-                          if (error) toast.error(error.message); else { toast.success("Removed"); loadAll(); }
-                        }}><Trash2 className="h-3.5 w-3.5" /></Button>
-                      </>
-                    )}
-                  </div>
+                  {isAdmin ? (
+                    <SourceFormDialog initial={s} onSaved={loadAll}
+                      trigger={<Button size="sm" variant={s.connected ? "outline" : "default"}>{s.connected ? "Manage" : "Connect"}</Button>} />
+                  ) : (
+                    <Button size="sm" variant={s.connected ? "outline" : "default"} disabled>{s.connected ? "Manage" : "Connect"}</Button>
+                  )}
                 </div>
               ))}
             </CardContent>
@@ -296,8 +263,8 @@ export function SettingsPage() {
 }
 
 function RoleAssigner({ onAssign, existing }: { onAssign: (role: AppRole) => void; existing: AppRole[] }) {
-  const [value, setValue] = useState<AppRole | "">("");
   const all: AppRole[] = ["admin", "moderator", "user"];
+  const [value, setValue] = useState<AppRole | "">("");
   const available = all.filter((r) => !existing.includes(r));
   return (
     <div className="flex items-center gap-2">
@@ -308,6 +275,33 @@ function RoleAssigner({ onAssign, existing }: { onAssign: (role: AppRole) => voi
         </SelectContent>
       </Select>
       <Button size="sm" variant="outline" disabled={!value} onClick={() => { if (value) { onAssign(value); setValue(""); } }}>Grant</Button>
+    </div>
+  );
+}
+
+function SshRowItem({ k, isAdmin, onSaved }: { k: SshRow; isAdmin: boolean; onSaved: () => void }) {
+  const added = new Date(k.created_at).toLocaleDateString("en-GB");
+  return (
+    <div className="flex items-center justify-between rounded-lg border border-border/50 bg-muted/20 px-4 py-3">
+      <div className="flex min-w-0 items-center gap-3">
+        <KeyRound className="h-4 w-4 text-muted-foreground" />
+        <div className="min-w-0">
+          <p className="truncate text-sm font-medium">{k.name}</p>
+          <p className="truncate font-mono text-xs text-muted-foreground">{k.fingerprint}</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-muted-foreground">added {added}</span>
+        {isAdmin && (
+          <>
+            <SshFormDialog initial={k} onSaved={onSaved} trigger={<Button size="sm" variant="outline">Edit</Button>} />
+            <Button size="sm" variant="ghost" onClick={async () => {
+              const { error } = await supabase.from("ssh_keys").delete().eq("id", k.id);
+              if (error) toast.error(error.message); else { toast.success("Removed"); onSaved(); }
+            }}><Trash2 className="h-3.5 w-3.5" /></Button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
@@ -356,9 +350,18 @@ function CloudFormDialog({ initial, onSaved, trigger }: { initial?: CloudRow; on
             <Switch checked={connected} onCheckedChange={setConnected} />
           </div>
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={submit} disabled={saving}>{saving ? "Saving…" : "Save"}</Button>
+        <DialogFooter className="sm:justify-between">
+          {initial ? (
+            <Button variant="ghost" className="text-destructive" onClick={async () => {
+              const { error } = await supabase.from("cloud_providers").delete().eq("id", initial.id);
+              if (error) return toast.error(error.message);
+              toast.success("Removed"); setOpen(false); onSaved();
+            }}><Trash2 className="h-3.5 w-3.5" /> Delete</Button>
+          ) : <span />}
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button onClick={submit} disabled={saving}>{saving ? "Saving…" : "Save"}</Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -409,9 +412,18 @@ function SourceFormDialog({ initial, onSaved, trigger }: { initial?: SourceRow; 
             <Switch checked={connected} onCheckedChange={setConnected} />
           </div>
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={submit} disabled={saving}>{saving ? "Saving…" : "Save"}</Button>
+        <DialogFooter className="sm:justify-between">
+          {initial ? (
+            <Button variant="ghost" className="text-destructive" onClick={async () => {
+              const { error } = await supabase.from("source_connections").delete().eq("id", initial.id);
+              if (error) return toast.error(error.message);
+              toast.success("Removed"); setOpen(false); onSaved();
+            }}><Trash2 className="h-3.5 w-3.5" /> Delete</Button>
+          ) : <span />}
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button onClick={submit} disabled={saving}>{saving ? "Saving…" : "Save"}</Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
