@@ -12,7 +12,7 @@ export function DashboardMockup() {
       transition={{ duration: 0.6, delay: 0.2 }}
       className="relative mx-auto w-full max-w-6xl"
     >
-      <div className="absolute -inset-x-20 -top-10 -bottom-10 -z-10 bg-[radial-gradient(ellipse_at_center,oklch(0.76_0.17_50/28%),transparent_60%)] blur-2xl" />
+      <div className="absolute -inset-x-20 -top-10 -bottom-10 -z-10 bg-[radial-gradient(ellipse_at_center,oklch(0.78_0.08_70/14%),transparent_60%)] blur-2xl" />
       <div className="overflow-hidden rounded-2xl border border-border/60 bg-card/60 shadow-[var(--shadow-elevated)] backdrop-blur-xl">
         <div className="flex items-center gap-2 border-b border-border/40 bg-card/80 px-4 py-3">
           <div className="flex gap-1.5">
