@@ -29,7 +29,7 @@ interface ProfileRow {
 interface RoleRow { id: string; user_id: string; role: AppRole }
 interface CloudRow { id: string; name: string; kind: string; region: string | null; connected: boolean }
 interface SourceRow { id: string; name: string; provider: string; account: string | null; connected: boolean }
-interface SshRow { id: string; name: string; fingerprint: string; public_key: string | null }
+interface SshRow { id: string; name: string; fingerprint: string; public_key: string | null; created_at: string }
 
 const cloudKinds = ["AWS", "Google Cloud", "Azure", "Fly.io", "DigitalOcean", "Hetzner"];
 const sourceProvidersList = ["GitHub", "GitLab", "Bitbucket", "Gitea"];
@@ -263,8 +263,8 @@ export function SettingsPage() {
 }
 
 function RoleAssigner({ onAssign, existing }: { onAssign: (role: AppRole) => void; existing: AppRole[] }) {
-  const [value, setValue] = useState<AppRole | "">("");
   const all: AppRole[] = ["admin", "moderator", "user"];
+  const [value, setValue] = useState<AppRole | "">("");
   const available = all.filter((r) => !existing.includes(r));
   return (
     <div className="flex items-center gap-2">
@@ -275,6 +275,33 @@ function RoleAssigner({ onAssign, existing }: { onAssign: (role: AppRole) => voi
         </SelectContent>
       </Select>
       <Button size="sm" variant="outline" disabled={!value} onClick={() => { if (value) { onAssign(value); setValue(""); } }}>Grant</Button>
+    </div>
+  );
+}
+
+function SshRowItem({ k, isAdmin, onSaved }: { k: SshRow; isAdmin: boolean; onSaved: () => void }) {
+  const added = new Date(k.created_at).toLocaleDateString("en-GB");
+  return (
+    <div className="flex items-center justify-between rounded-lg border border-border/50 bg-muted/20 px-4 py-3">
+      <div className="flex min-w-0 items-center gap-3">
+        <KeyRound className="h-4 w-4 text-muted-foreground" />
+        <div className="min-w-0">
+          <p className="truncate text-sm font-medium">{k.name}</p>
+          <p className="truncate font-mono text-xs text-muted-foreground">{k.fingerprint}</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-muted-foreground">added {added}</span>
+        {isAdmin && (
+          <>
+            <SshFormDialog initial={k} onSaved={onSaved} trigger={<Button size="sm" variant="outline">Edit</Button>} />
+            <Button size="sm" variant="ghost" onClick={async () => {
+              const { error } = await supabase.from("ssh_keys").delete().eq("id", k.id);
+              if (error) toast.error(error.message); else { toast.success("Removed"); onSaved(); }
+            }}><Trash2 className="h-3.5 w-3.5" /></Button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
