@@ -1,5 +1,13 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { LayoutDashboard, FolderGit2, Rocket, ShieldCheck, Settings, Bell, LogOut } from "lucide-react";
+import {
+  LayoutDashboard,
+  FolderGit2,
+  Rocket,
+  ShieldCheck,
+  Settings,
+  Bell,
+  LogOut,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -29,9 +37,7 @@ const main: Item[] = [
   { title: "Notifications", url: "/app/notifications", icon: Bell },
 ];
 
-const secondary: Item[] = [
-  { title: "Settings", url: "/app/settings", icon: Settings },
-];
+const secondary: Item[] = [{ title: "Settings", url: "/app/settings", icon: Settings }];
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -39,7 +45,9 @@ export function AppSidebar() {
   const navigate = useNavigate();
 
   const isActive = (item: Item) =>
-    item.exact ? pathname === item.url : pathname === item.url || pathname.startsWith(item.url + "/");
+    item.exact
+      ? pathname === item.url
+      : pathname === item.url || pathname.startsWith(item.url + "/");
 
   const initial = (user?.email ?? "U")[0]?.toUpperCase() ?? "U";
 
@@ -98,7 +106,9 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-border/40">
         <div className="flex items-center gap-2 px-1.5 py-1.5">
           <Avatar className="h-8 w-8 border border-border/60">
-            <AvatarFallback className="bg-primary/15 text-xs font-semibold text-primary">{initial}</AvatarFallback>
+            <AvatarFallback className="bg-primary/15 text-xs font-semibold text-primary">
+              {initial}
+            </AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
             <p className="truncate text-xs font-medium">{user?.email ?? "Signed in"}</p>

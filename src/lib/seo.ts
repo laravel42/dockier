@@ -1,10 +1,14 @@
-type Meta = { title?: string; name?: string; property?: string; content?: string; charSet?: string };
+type Meta = {
+  title?: string;
+  name?: string;
+  property?: string;
+  content?: string;
+  charSet?: string;
+};
 
-export function pageHead(opts: {
-  title: string;
-  description: string;
-  path?: string;
-}): { meta: Array<Meta> } {
+export function pageHead(opts: { title: string; description: string; path?: string }): {
+  meta: Array<Meta>;
+} {
   const { title, description } = opts;
   return {
     meta: [

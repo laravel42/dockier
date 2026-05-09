@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { Severity } from "@/features/dashboard/fixtures/data";
+import type { Severity } from "@/features/dashboard/lib/types";
 
 const tokens: Record<Severity, string> = {
   critical: "var(--sev-critical)",
@@ -45,7 +45,12 @@ export function SeverityBadge({ severity, count, className }: Props) {
 
 export function CleanBadge({ className }: { className?: string }) {
   return (
-    <span className={cn("inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-300", className)}>
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-300",
+        className,
+      )}
+    >
       Clean
     </span>
   );
