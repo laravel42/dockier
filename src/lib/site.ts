@@ -1,5 +1,5 @@
 import {
-  Shield, Sparkles, GitBranch, Database, Wrench, Rocket, Users,
+  Shield, Sparkles, GitBranch, Database, Wrench, Rocket,
   type LucideIcon,
 } from "lucide-react";
 
