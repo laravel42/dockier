@@ -32,6 +32,7 @@ import { Route as AuthenticatedAppSecurityRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAppProjectsRouteImport } from './routes/_authenticated/app/projects'
 import { Route as AuthenticatedAppNotificationsRouteImport } from './routes/_authenticated/app/notifications'
 import { Route as AuthenticatedAppDeployRouteImport } from './routes/_authenticated/app/deploy'
+import { Route as AuthenticatedAppSecurityIndexRouteImport } from './routes/_authenticated/app/security.index'
 import { Route as AuthenticatedAppProjectsIndexRouteImport } from './routes/_authenticated/app/projects.index'
 import { Route as AuthenticatedAppSecurityScanIdRouteImport } from './routes/_authenticated/app/security.$scanId'
 import { Route as AuthenticatedAppProjectsProjectIdRouteImport } from './routes/_authenticated/app/projects.$projectId'
@@ -154,6 +155,12 @@ const AuthenticatedAppDeployRoute = AuthenticatedAppDeployRouteImport.update({
   path: '/deploy',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const AuthenticatedAppSecurityIndexRoute =
+  AuthenticatedAppSecurityIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAppSecurityRoute,
+  } as any)
 const AuthenticatedAppProjectsIndexRoute =
   AuthenticatedAppProjectsIndexRouteImport.update({
     id: '/',
@@ -199,6 +206,7 @@ export interface FileRoutesByFullPath {
   '/app/projects/$projectId': typeof AuthenticatedAppProjectsProjectIdRoute
   '/app/security/$scanId': typeof AuthenticatedAppSecurityScanIdRoute
   '/app/projects/': typeof AuthenticatedAppProjectsIndexRoute
+  '/app/security/': typeof AuthenticatedAppSecurityIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -218,12 +226,12 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/app/deploy': typeof AuthenticatedAppDeployRoute
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
-  '/app/security': typeof AuthenticatedAppSecurityRouteWithChildren
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app': typeof AuthenticatedAppIndexRoute
   '/app/projects/$projectId': typeof AuthenticatedAppProjectsProjectIdRoute
   '/app/security/$scanId': typeof AuthenticatedAppSecurityScanIdRoute
   '/app/projects': typeof AuthenticatedAppProjectsIndexRoute
+  '/app/security': typeof AuthenticatedAppSecurityIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -253,6 +261,7 @@ export interface FileRoutesById {
   '/_authenticated/app/projects/$projectId': typeof AuthenticatedAppProjectsProjectIdRoute
   '/_authenticated/app/security/$scanId': typeof AuthenticatedAppSecurityScanIdRoute
   '/_authenticated/app/projects/': typeof AuthenticatedAppProjectsIndexRoute
+  '/_authenticated/app/security/': typeof AuthenticatedAppSecurityIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -282,6 +291,7 @@ export interface FileRouteTypes {
     | '/app/projects/$projectId'
     | '/app/security/$scanId'
     | '/app/projects/'
+    | '/app/security/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -301,12 +311,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/app/deploy'
     | '/app/notifications'
-    | '/app/security'
     | '/app/settings'
     | '/app'
     | '/app/projects/$projectId'
     | '/app/security/$scanId'
     | '/app/projects'
+    | '/app/security'
   id:
     | '__root__'
     | '/'
@@ -335,6 +345,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/projects/$projectId'
     | '/_authenticated/app/security/$scanId'
     | '/_authenticated/app/projects/'
+    | '/_authenticated/app/security/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -518,6 +529,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppDeployRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/security/': {
+      id: '/_authenticated/app/security/'
+      path: '/'
+      fullPath: '/app/security/'
+      preLoaderRoute: typeof AuthenticatedAppSecurityIndexRouteImport
+      parentRoute: typeof AuthenticatedAppSecurityRoute
+    }
     '/_authenticated/app/projects/': {
       id: '/_authenticated/app/projects/'
       path: '/'
@@ -561,11 +579,13 @@ const AuthenticatedAppProjectsRouteWithChildren =
 
 interface AuthenticatedAppSecurityRouteChildren {
   AuthenticatedAppSecurityScanIdRoute: typeof AuthenticatedAppSecurityScanIdRoute
+  AuthenticatedAppSecurityIndexRoute: typeof AuthenticatedAppSecurityIndexRoute
 }
 
 const AuthenticatedAppSecurityRouteChildren: AuthenticatedAppSecurityRouteChildren =
   {
     AuthenticatedAppSecurityScanIdRoute: AuthenticatedAppSecurityScanIdRoute,
+    AuthenticatedAppSecurityIndexRoute: AuthenticatedAppSecurityIndexRoute,
   }
 
 const AuthenticatedAppSecurityRouteWithChildren =
@@ -628,3 +648,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
