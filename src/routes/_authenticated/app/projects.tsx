@@ -1,8 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { ProjectsPage } from "@/features/dashboard/pages/projects";
-import { pageHead } from "@/lib/seo";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/app/projects")({
-  head: () => pageHead({ title: "Projects — Dockier", description: "All connected repositories." }),
-  component: ProjectsPage,
+  component: () => <Outlet />,
 });
