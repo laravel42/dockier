@@ -5,7 +5,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { PageHeader } from "@/features/dashboard/components/page-header";
-import { projects } from "@/features/dashboard/fixtures/data";
+import { projects, scans } from "@/features/dashboard/fixtures/data";
+import { SeverityBadge, CleanBadge } from "@/features/dashboard/components/severity-badge";
+import type { Severity } from "@/features/dashboard/fixtures/data";
 
 export function ProjectsPage() {
   return (
@@ -24,7 +26,13 @@ export function ProjectsPage() {
       />
 
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {projects.map((p) => (
+        {projects.map((p) => {
+          const summary = scans.find((s) => s.projectId === p.id)?.summary;
+          const severities: Severity[] = ["critical", "high", "medium", "low", "info"];
+          const chips = summary
+            ? severities.filter((s) => summary[s] > 0).map((s) => ({ s, n: summary[s] }))
+            : [];
+          return (
           <Card key={p.id} className="group bg-card/60 transition-all hover:border-primary/40">
             <Link
               to="/app/projects/$projectId"
@@ -46,6 +54,13 @@ export function ProjectsPage() {
                 <span>· {p.language}</span>
                 <span>· {p.findings} findings</span>
               </div>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {chips.length === 0 ? (
+                  <CleanBadge />
+                ) : (
+                  chips.map(({ s, n }) => <SeverityBadge key={s} severity={s} count={n} />)
+                )}
+              </div>
               <div className="mt-4 flex items-center justify-between border-t border-border/40 pt-3">
                 <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   Updated {new Date(p.updatedAt).toLocaleDateString()}
@@ -57,7 +72,8 @@ export function ProjectsPage() {
             </CardContent>
             </Link>
           </Card>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
