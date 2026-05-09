@@ -24,10 +24,10 @@ export function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="font-display mt-6 text-3xl font-semibold leading-[1.05] tracking-tight text-gradient sm:text-5xl lg:text-6xl"
+            className="font-display mt-6 text-4xl font-semibold leading-[1.05] tracking-tight text-gradient sm:text-6xl lg:text-7xl"
           >
             AI-native DevSecOps for{" "}
-            <span className="text-gradient-primary whitespace-nowrap">modern engineering teams</span>
+            <span className="text-gradient-primary whitespace-nowrap text-3xl sm:text-5xl lg:text-6xl">modern engineering teams</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
