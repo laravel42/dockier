@@ -183,6 +183,12 @@
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent 75%);
   }
 
+  .dot-bg {
+    background-image: radial-gradient(oklch(1 0 0 / 7%) 1px, transparent 1.2px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent 75%);
+  }
+
   .glass {
     background: var(--surface);
     backdrop-filter: blur(12px);
