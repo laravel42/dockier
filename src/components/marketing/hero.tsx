@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Github, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Typography } from "@/components/ui/typography";
 import { DashboardMockup } from "./dashboard-mockup";
 
 export function Hero() {
@@ -20,24 +21,28 @@ export function Hero() {
             <Sparkles className="h-3.5 w-3.5" />
             New: AI architecture analysis on every commit
           </motion.div>
-          <motion.h1
+          <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="font-display mt-6 text-4xl font-semibold leading-[1.05] tracking-tight text-gradient sm:text-6xl lg:text-7xl"
+            className="mt-6"
           >
-            AI-native DevSecOps for{" "}
-            <span className="text-gradient-primary">modern engineering teams</span>
-          </motion.h1>
-          <motion.p
+            <Typography variant="display" tone="gradient" as="h1">
+              AI-native DevSecOps for{" "}
+              <span className="text-gradient-primary">modern engineering teams</span>
+            </Typography>
+          </motion.div>
+          <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg"
+            className="mx-auto mt-5 max-w-[60ch]"
           >
-            Connect your repositories, scan for vulnerabilities, understand your architecture
-            with AI, and ship to production — all from one platform.
-          </motion.p>
+            <Typography variant="lead" as="p">
+              Connect your repositories, scan for vulnerabilities, understand your architecture
+              with AI, and ship to production — all from one platform.
+            </Typography>
+          </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
