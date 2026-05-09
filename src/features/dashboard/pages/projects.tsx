@@ -1,4 +1,5 @@
-import { Plus, GitBranch, ExternalLink } from "lucide-react";
+import { Plus, GitBranch, ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +26,11 @@ export function ProjectsPage() {
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {projects.map((p) => (
           <Card key={p.id} className="group bg-card/60 transition-all hover:border-primary/40">
+            <Link
+              to="/app/projects/$projectId"
+              params={{ projectId: p.id }}
+              className="block"
+            >
             <CardContent className="p-5">
               <div className="mb-3 flex items-start justify-between gap-2">
                 <div className="min-w-0">
@@ -44,11 +50,12 @@ export function ProjectsPage() {
                 <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   Updated {new Date(p.updatedAt).toLocaleDateString()}
                 </span>
-                <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs">
-                  Open <ExternalLink className="h-3 w-3" />
-                </Button>
+                <span className="inline-flex items-center gap-1 text-xs text-muted-foreground group-hover:text-foreground">
+                  Open <ArrowRight className="h-3 w-3" />
+                </span>
               </div>
             </CardContent>
+            </Link>
           </Card>
         ))}
       </div>
