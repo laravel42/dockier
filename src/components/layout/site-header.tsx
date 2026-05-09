@@ -39,7 +39,7 @@ export function SiteHeader() {
           {user ? (
             <>
               <Button asChild variant="ghost" size="sm" className="rounded-full">
-                <Link to="/dashboard">
+                <Link to="/app">
                   <LayoutDashboard className="h-3.5 w-3.5" /> Dashboard
                 </Link>
               </Button>
@@ -85,7 +85,7 @@ export function SiteHeader() {
               {user ? (
                 <>
                   <Button asChild variant="outline" size="sm" className="rounded-full">
-                    <Link to="/dashboard" onClick={() => setOpen(false)}>Dashboard</Link>
+                    <Link to="/app" onClick={() => setOpen(false)}>Dashboard</Link>
                   </Button>
                   <Button size="sm" className="rounded-full" onClick={() => { setOpen(false); onSignOut(); }}>
                     Sign out
