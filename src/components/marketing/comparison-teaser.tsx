@@ -3,13 +3,13 @@ import { Link } from "@tanstack/react-router";
 import { comparison } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 
-const cols = [
+const cols: ReadonlyArray<{ key: "us" | "snyk" | "ghas" | "sonar" | "gitlab"; label: string; us?: boolean }> = [
   { key: "us", label: "Dockier", us: true },
   { key: "snyk", label: "Snyk" },
   { key: "ghas", label: "GitHub AS" },
   { key: "sonar", label: "SonarQube" },
   { key: "gitlab", label: "GitLab" },
-] as const;
+];
 
 function Cell({ v }: { v: boolean | "partial" }) {
   if (v === true) return <Check className="mx-auto h-4 w-4 text-primary" />;
