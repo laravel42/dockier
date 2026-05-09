@@ -83,3 +83,72 @@ export const notifications: NotificationItem[] = [
   { id: "n3", title: "Scan completed", body: "billing-svc: no findings", level: "success", createdAt: "2026-05-07T15:32:00Z", read: true },
   { id: "n4", title: "New team member", body: "marco@dockier.dev joined the workspace", level: "info", createdAt: "2026-05-06T09:00:00Z", read: true },
 ];
+
+export interface Commit {
+  sha: string;
+  message: string;
+  author: string;
+  authorEmail: string;
+  createdAt: string;
+}
+
+export interface Contributor {
+  name: string;
+  email: string;
+  commits: number;
+}
+
+export const commitsByProject: Record<string, Commit[]> = {
+  p1: [
+    { sha: "9f3c1ab", message: "feat(gateway): adaptive rate limiter per token bucket", author: "Sara Conti", authorEmail: "sara@dockier.dev", createdAt: "2026-05-08T10:48:00Z" },
+    { sha: "7d22f10", message: "fix: drop stale upstream connections after 30s idle", author: "Marco Rossi", authorEmail: "marco@dockier.dev", createdAt: "2026-05-08T08:14:00Z" },
+    { sha: "1abf402", message: "chore: bump deps and pin tokio to 1.39", author: "Sara Conti", authorEmail: "sara@dockier.dev", createdAt: "2026-05-07T17:02:00Z" },
+    { sha: "b3f8c11", message: "docs: clarify TLS termination flow", author: "Lia Greco", authorEmail: "lia@dockier.dev", createdAt: "2026-05-06T11:33:00Z" },
+  ],
+  p2: [
+    { sha: "ae0019c", message: "feat(billing): prorated upgrades on annual plans", author: "Marco Rossi", authorEmail: "marco@dockier.dev", createdAt: "2026-05-08T08:20:00Z" },
+    { sha: "5fe61aa", message: "test: cover edge cases in coupon stacking", author: "Lia Greco", authorEmail: "lia@dockier.dev", createdAt: "2026-05-07T14:11:00Z" },
+  ],
+  p3: [
+    { sha: "2b71e4d", message: "feat(studio): inline diff viewer for fix suggestions", author: "Sara Conti", authorEmail: "sara@dockier.dev", createdAt: "2026-05-08T10:42:00Z" },
+    { sha: "8aa1c20", message: "refactor: collapse provider list into composable", author: "Lia Greco", authorEmail: "lia@dockier.dev", createdAt: "2026-05-07T19:55:00Z" },
+    { sha: "0b91ee7", message: "fix: dark mode contrast on severity chips", author: "Marco Rossi", authorEmail: "marco@dockier.dev", createdAt: "2026-05-06T16:20:00Z" },
+  ],
+  p4: [
+    { sha: "1d77f02", message: "infra: bump RDS to t4g.medium across staging", author: "Marco Rossi", authorEmail: "marco@dockier.dev", createdAt: "2026-05-07T22:01:00Z" },
+  ],
+  p5: [
+    { sha: "c4e9b81", message: "perf: parallel shard ingestion (4x throughput)", author: "Sara Conti", authorEmail: "sara@dockier.dev", createdAt: "2026-05-07T17:40:00Z" },
+  ],
+};
+
+export const contributorsByProject: Record<string, Contributor[]> = {
+  p1: [
+    { name: "Sara Conti", email: "sara@dockier.dev", commits: 142 },
+    { name: "Marco Rossi", email: "marco@dockier.dev", commits: 88 },
+    { name: "Lia Greco", email: "lia@dockier.dev", commits: 24 },
+  ],
+  p2: [
+    { name: "Marco Rossi", email: "marco@dockier.dev", commits: 96 },
+    { name: "Lia Greco", email: "lia@dockier.dev", commits: 41 },
+  ],
+  p3: [
+    { name: "Sara Conti", email: "sara@dockier.dev", commits: 187 },
+    { name: "Lia Greco", email: "lia@dockier.dev", commits: 73 },
+    { name: "Marco Rossi", email: "marco@dockier.dev", commits: 35 },
+  ],
+  p4: [
+    { name: "Marco Rossi", email: "marco@dockier.dev", commits: 28 },
+  ],
+  p5: [
+    { name: "Sara Conti", email: "sara@dockier.dev", commits: 64 },
+  ],
+};
+
+export const projectDescriptions: Record<string, string> = {
+  p1: "Edge HTTP gateway handling TLS termination, adaptive rate limiting and per-tenant routing for the Dockier platform. Written in TypeScript on Bun, deployed to Fly.io regions.",
+  p2: "Subscription, invoicing and proration service. Integrates with Stripe and the internal usage meter. Go service with Postgres persistence.",
+  p3: "Customer-facing studio UI: project workspaces, scan results, fix suggestions and deploy review. React + TanStack Start.",
+  p4: "Terraform definitions for staging and production: VPC, RDS, S3, CloudFront, IAM. Reviewed via PR with policy-as-code checks.",
+  p5: "Search indexer that ingests scan findings into the OpenSearch cluster with sharded parallel pipelines. Rust + Tokio.",
+};
