@@ -47,19 +47,19 @@ export function ProjectsPage() {
                 </div>
                 <Badge variant="outline" className="shrink-0 text-[10px] uppercase tracking-wider">{p.provider}</Badge>
               </div>
-              <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                <span className="inline-flex items-center gap-1">
-                  <GitBranch className="h-3 w-3" /> {p.branch}
-                </span>
-                <span>· {p.language}</span>
-                <span>· {p.findings} findings</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="secondary" className="text-[10px] font-medium">
+                  <GitBranch className="mr-1 h-3 w-3" /> {p.branch}
+                </Badge>
+                <Badge variant="secondary" className="text-[10px] font-medium">{p.language}</Badge>
               </div>
-              <div className="mt-3 flex flex-wrap gap-1.5">
+              <div className="mt-3 flex flex-wrap items-center gap-1.5">
                 {chips.length === 0 ? (
                   <CleanBadge />
                 ) : (
                   chips.map(({ s, n }) => <SeverityBadge key={s} severity={s} count={n} />)
                 )}
+                <span className="ml-auto text-[11px] text-muted-foreground">{p.findings} findings</span>
               </div>
               <div className="mt-4 flex items-center justify-between border-t border-border/40 pt-3">
                 <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
