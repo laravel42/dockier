@@ -29,6 +29,7 @@ import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/ap
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app/index'
 import { Route as AuthenticatedAppSecurityRouteImport } from './routes/_authenticated/app/security'
 import { Route as AuthenticatedAppProjectsRouteImport } from './routes/_authenticated/app/projects'
+import { Route as AuthenticatedAppNotificationsRouteImport } from './routes/_authenticated/app/notifications'
 import { Route as AuthenticatedAppDeployRouteImport } from './routes/_authenticated/app/deploy'
 import { Route as AuthenticatedAppProjectsProjectIdRouteImport } from './routes/_authenticated/app/projects.$projectId'
 
@@ -133,6 +134,12 @@ const AuthenticatedAppProjectsRoute =
     path: '/projects',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppNotificationsRoute =
+  AuthenticatedAppNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppDeployRoute = AuthenticatedAppDeployRouteImport.update({
   id: '/deploy',
   path: '/deploy',
@@ -163,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AuthenticatedAppRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/app/deploy': typeof AuthenticatedAppDeployRoute
+  '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/projects': typeof AuthenticatedAppProjectsRouteWithChildren
   '/app/security': typeof AuthenticatedAppSecurityRoute
   '/app/': typeof AuthenticatedAppIndexRoute
@@ -185,6 +193,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/app/deploy': typeof AuthenticatedAppDeployRoute
+  '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/projects': typeof AuthenticatedAppProjectsRouteWithChildren
   '/app/security': typeof AuthenticatedAppSecurityRoute
   '/app': typeof AuthenticatedAppIndexRoute
@@ -210,6 +219,7 @@ export interface FileRoutesById {
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/app/deploy': typeof AuthenticatedAppDeployRoute
+  '/_authenticated/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/_authenticated/app/projects': typeof AuthenticatedAppProjectsRouteWithChildren
   '/_authenticated/app/security': typeof AuthenticatedAppSecurityRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
@@ -235,6 +245,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/dashboard'
     | '/app/deploy'
+    | '/app/notifications'
     | '/app/projects'
     | '/app/security'
     | '/app/'
@@ -257,6 +268,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/dashboard'
     | '/app/deploy'
+    | '/app/notifications'
     | '/app/projects'
     | '/app/security'
     | '/app'
@@ -281,6 +293,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app'
     | '/_authenticated/dashboard'
     | '/_authenticated/app/deploy'
+    | '/_authenticated/app/notifications'
     | '/_authenticated/app/projects'
     | '/_authenticated/app/security'
     | '/_authenticated/app/'
@@ -447,6 +460,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppProjectsRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/notifications': {
+      id: '/_authenticated/app/notifications'
+      path: '/notifications'
+      fullPath: '/app/notifications'
+      preLoaderRoute: typeof AuthenticatedAppNotificationsRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/deploy': {
       id: '/_authenticated/app/deploy'
       path: '/deploy'
@@ -481,6 +501,7 @@ const AuthenticatedAppProjectsRouteWithChildren =
 
 interface AuthenticatedAppRouteChildren {
   AuthenticatedAppDeployRoute: typeof AuthenticatedAppDeployRoute
+  AuthenticatedAppNotificationsRoute: typeof AuthenticatedAppNotificationsRoute
   AuthenticatedAppProjectsRoute: typeof AuthenticatedAppProjectsRouteWithChildren
   AuthenticatedAppSecurityRoute: typeof AuthenticatedAppSecurityRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
@@ -488,6 +509,7 @@ interface AuthenticatedAppRouteChildren {
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppDeployRoute: AuthenticatedAppDeployRoute,
+  AuthenticatedAppNotificationsRoute: AuthenticatedAppNotificationsRoute,
   AuthenticatedAppProjectsRoute: AuthenticatedAppProjectsRouteWithChildren,
   AuthenticatedAppSecurityRoute: AuthenticatedAppSecurityRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
@@ -530,3 +552,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
