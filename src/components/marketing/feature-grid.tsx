@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { features } from "@/lib/site";
-import { Typography } from "@/components/ui/typography";
 
 export function FeatureGrid() {
   return (
@@ -19,12 +18,8 @@ export function FeatureGrid() {
           <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-primary/30 bg-primary/10 text-primary">
             <f.icon className="h-5 w-5" />
           </div>
-          <Typography variant="title" as="h3" className="mt-5">
-            {f.title}
-          </Typography>
-          <Typography variant="muted" as="p" className="mt-2 text-[length:var(--fs-small)]">
-            {f.blurb}
-          </Typography>
+          <h3 className="mt-5 font-display text-xl font-semibold">{f.title}</h3>
+          <p className="mt-2 text-sm text-muted-foreground">{f.blurb}</p>
           <ul className="mt-4 space-y-2">
             {f.bullets.map((b) => (
               <li key={b} className="flex items-start gap-2 text-sm">

@@ -64,30 +64,6 @@
 :root {
   /* Dockier — dark-first design tokens */
   --radius: 0.75rem;
-  /* Typography scale — single source of truth, tweak for global density */
-  --fs-body: 0.9375rem;       /* 15px */
-  --lh-body: 1.55;
-  --measure: 68ch;             /* readable line length */
-  --fs-small: 0.8125rem;       /* 13px */
-  --fs-button: 0.8125rem;      /* 13px */
-  --fs-button-sm: 0.75rem;
-  --fs-button-lg: 0.875rem;
-  --fs-mono-label: 0.6875rem;  /* 11px */
-  --fs-display: 3rem;          /* 48px */
-  --fs-h1: 2.25rem;            /* 36px */
-  --fs-h2: 1.75rem;            /* 28px */
-  --fs-h3: 1.375rem;           /* 22px */
-  --fs-h4: 1.0625rem;          /* 17px */
-  --fs-h5: 0.875rem;
-  --fs-h6: 0.75rem;
-  --lh-tight: 1.05;
-  --lh-snug: 1.18;
-  --lh-heading: 1.25;
-  --tracking-display: -0.04em;
-  --tracking-heading: -0.025em;
-  --tracking-eyebrow: 0.08em;
-  --space-section-y: 3rem;
-  --space-heading-mb: 0.75rem;
   /* Restrained graphite base with a muted sand/ochre accent — sober, editorial, distinct from Amedeus mint */
   --background: oklch(0.17 0.008 50);
   --foreground: oklch(0.95 0.008 60);
@@ -137,35 +113,6 @@
   --sidebar-ring: oklch(0.78 0.08 70);
 }
 
-/* Responsive scale — tighten on mobile, expand on large screens */
-@media (min-width: 640px) {
-  :root {
-    --fs-display: 3.75rem;
-    --fs-h1: 2.75rem;
-    --fs-h2: 2.125rem;
-    --space-section-y: 4rem;
-  }
-}
-@media (min-width: 1024px) {
-  :root {
-    --fs-display: 4.75rem;
-    --fs-h1: 3.25rem;
-    --fs-h2: 2.5rem;
-    --fs-h3: 1.5rem;
-    --fs-body: 0.9375rem;
-    --space-section-y: 5rem;
-  }
-}
-@media (min-width: 1536px) {
-  :root {
-    --fs-display: 5.5rem;
-    --fs-h1: 3.75rem;
-    --fs-h2: 2.75rem;
-    --fs-body: 1rem;
-    --space-section-y: 6rem;
-  }
-}
-
 .dark {
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
@@ -212,8 +159,8 @@
     font-family: "Inter Tight", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
     font-feature-settings: "ss01", "cv01", "cv02";
     -webkit-font-smoothing: antialiased;
-    font-size: var(--fs-body);
-    line-height: var(--lh-body);
+    font-size: 15px;
+    line-height: 1.55;
     letter-spacing: -0.005em;
     background-image:
       radial-gradient(ellipse 80% 50% at 50% -10%, oklch(0.78 0.08 70 / 7%), transparent 60%),
@@ -225,20 +172,19 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: "Space Grotesk", "Inter Tight", ui-sans-serif, system-ui, sans-serif;
     font-weight: 600;
-    letter-spacing: var(--tracking-heading);
-    line-height: var(--lh-heading);
+    letter-spacing: -0.025em;
+    line-height: 1.1;
     color: var(--color-foreground);
-    margin-bottom: var(--space-heading-mb);
   }
-  h1 { font-size: var(--fs-h1); letter-spacing: var(--tracking-display); line-height: var(--lh-tight); }
-  h2 { font-size: var(--fs-h2); letter-spacing: -0.03em; line-height: var(--lh-snug); }
-  h3 { font-size: var(--fs-h3); line-height: 1.2; }
-  h4 { font-size: var(--fs-h4); line-height: 1.3; }
-  h5 { font-size: var(--fs-h5); line-height: 1.3; text-transform: uppercase; letter-spacing: 0.04em; }
-  h6 { font-size: var(--fs-h6); line-height: 1.3; text-transform: uppercase; letter-spacing: var(--tracking-eyebrow); color: var(--color-muted-foreground); }
+  h1 { font-size: clamp(2.25rem, 4.4vw, 3.5rem); letter-spacing: -0.035em; line-height: 1.02; }
+  h2 { font-size: clamp(1.75rem, 3vw, 2.375rem); letter-spacing: -0.03em; line-height: 1.08; }
+  h3 { font-size: 1.5rem; line-height: 1.15; }
+  h4 { font-size: 1.125rem; line-height: 1.25; }
+  h5 { font-size: 0.9375rem; line-height: 1.3; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+  h6 { font-size: 0.75rem; line-height: 1.3; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; color: var(--color-muted-foreground); }
 
-  p { font-size: var(--fs-body); line-height: var(--lh-body); max-width: var(--measure); }
-  small { font-size: var(--fs-small); line-height: 1.5; }
+  p { font-size: 0.9375rem; line-height: 1.6; }
+  small { font-size: 0.8125rem; line-height: 1.5; }
 
   button, input, select, textarea { font-family: inherit; }
 
