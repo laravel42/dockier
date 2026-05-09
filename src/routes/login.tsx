@@ -22,7 +22,7 @@ function LoginPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/dashboard" });
+      if (data.session) navigate({ to: "/app" });
     });
   }, [navigate]);
 
@@ -36,19 +36,19 @@ function LoginPage() {
       return;
     }
     toast.success("Welcome back");
-    navigate({ to: "/dashboard" });
+    navigate({ to: "/app" });
   };
 
   const onGoogle = async () => {
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + "/dashboard",
+      redirect_uri: window.location.origin + "/app",
     });
     if (result.error) {
       toast.error("Google sign-in failed");
       return;
     }
     if (result.redirected) return;
-    navigate({ to: "/dashboard" });
+    navigate({ to: "/app" });
   };
 
   return (
