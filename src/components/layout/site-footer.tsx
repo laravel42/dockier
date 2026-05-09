@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Github, Twitter } from "lucide-react";
+import { Logo } from "@/components/marketing/logo";
 import { site } from "@/lib/site";
 
 const cols: ReadonlyArray<{ title: string; links: ReadonlyArray<{ label: string; to: string }> }> = [
@@ -35,7 +36,7 @@ export function SiteFooter() {
     <footer className="border-t border-border/40 bg-background/60">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-5 lg:px-8">
         <div className="lg:col-span-2">
-          <p className="font-display text-2xl tracking-tight">Dockier</p>
+          <Logo />
           <p className="mt-3 max-w-sm text-sm text-muted-foreground">
             AI-native DevSecOps for modern engineering teams. Secure. Analyze. Deploy.
           </p>
