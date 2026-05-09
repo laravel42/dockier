@@ -73,13 +73,6 @@ export const features: ReadonlyArray<Feature> = [
     blurb: "Branch-based deploys to AWS and GCP with full history, docker image tracking, and rollback.",
     bullets: ["AWS + GCP providers", "Per-branch pipelines", "Deploy history and rollback"],
   },
-  {
-    id: "team",
-    icon: Users,
-    title: "Team collaboration",
-    blurb: "RBAC, groups, and integrations with Jira, Linear, Slack, and webhooks for everything that matters.",
-    bullets: ["Role-based access + 2FA", "Jira / Linear issue sync", "Slack + webhook notifications"],
-  },
 ];
 
 export const stats: ReadonlyArray<{ value: string; label: string }> = [
