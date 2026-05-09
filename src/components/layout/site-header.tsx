@@ -9,8 +9,8 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   return (
     <header className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4">
-      <div className="pointer-events-auto flex w-full max-w-3xl items-center justify-between gap-2 rounded-full border border-border/60 bg-background/70 px-2 py-2 shadow-[var(--shadow-elevated)] backdrop-blur-xl">
-        <Logo className="pl-2" />
+      <div className="pointer-events-auto flex w-full max-w-5xl items-center justify-between gap-4 rounded-full border border-border/60 bg-background/70 px-3 py-2 shadow-[var(--shadow-elevated)] backdrop-blur-xl">
+        <Logo className="shrink-0" />
         <nav className="hidden items-center gap-1 md:flex">
           {nav.map((n) => (
             <Link
