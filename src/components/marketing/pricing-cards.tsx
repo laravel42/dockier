@@ -34,8 +34,8 @@ export function PricingCards() {
               </li>
             ))}
           </ul>
-          <Button asChild className={`mt-7 ${p.highlight ? "glow" : ""}`} variant={p.highlight ? "default" : "outline"}>
-            <Link to="/contact">{p.cta}</Link>
+          <Button className={`mt-7 ${p.highlight ? "glow" : ""}`} variant={p.highlight ? "default" : "outline"} asChild>
+            <a href="#early-access">{p.cta}</a>
           </Button>
         </div>
       ))}

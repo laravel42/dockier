@@ -35,10 +35,10 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="mt-8 flex flex-wrap items-center justify-center gap-4"
           >
-            <Button asChild size="lg" className="glow h-14 px-8 text-lg">
-              <Link to="/contact">
-                Start free <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
+            <Button size="lg" className="glow h-14 px-8 text-lg" asChild>
+              <a href="#early-access">
+                Get early access <ArrowRight className="ml-2 h-5 w-5" />
+              </a>
             </Button>
           </motion.div>
         </div>

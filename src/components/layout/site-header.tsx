@@ -58,13 +58,10 @@ export function SiteHeader() {
               >
                 <Github className="h-4 w-4" />
               </a>
-              <Button asChild variant="ghost" size="sm" className="rounded-full">
-                <Link to="/login">Sign in</Link>
-              </Button>
-              <Button asChild size="sm" className="glow rounded-full">
-                <Link to="/signup">
-                  Start free <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                </Link>
+              <Button size="sm" className="glow rounded-full" asChild>
+                <a href="#early-access">
+                  Get early access <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                </a>
               </Button>
             </>
           )}
@@ -101,23 +98,20 @@ export function SiteHeader() {
                   </Button>
                 </>
               ) : (
-                <>
-                  <a
-                    href="https://github.com/laravel42/dockier"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-                    onClick={() => setOpen(false)}
-                  >
-                    <Github className="h-4 w-4" /> View on GitHub
-                  </a>
-                  <Button asChild variant="outline" size="sm" className="rounded-full">
-                    <Link to="/login" onClick={() => setOpen(false)}>Sign in</Link>
-                  </Button>
-                  <Button asChild size="sm" className="rounded-full">
-                    <Link to="/signup" onClick={() => setOpen(false)}>Start free</Link>
-                  </Button>
-                </>
+              <>
+                <a
+                  href="https://github.com/laravel42/dockier"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                  onClick={() => setOpen(false)}
+                >
+                  <Github className="h-4 w-4" /> View on GitHub
+                </a>
+                <Button size="sm" className="rounded-full" asChild>
+                  <a href="#early-access" onClick={() => setOpen(false)}>Get early access</a>
+                </Button>
+              </>
               )}
             </div>
           </nav>

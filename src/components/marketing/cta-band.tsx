@@ -8,7 +8,7 @@ export function CtaBand() {
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
   return (
-    <div className="relative mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+    <div id="early-access" className="relative mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
       <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-card/60 p-10 text-center backdrop-blur-xl sm:p-16">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,oklch(0.78_0.14_180/20%),transparent_60%)]" />
         <h2 className="font-display mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-gradient sm:text-5xl">
