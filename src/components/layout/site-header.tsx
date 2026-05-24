@@ -35,7 +35,7 @@ export function SiteHeader() {
             <Github className="h-4 w-4" />
           </a>
           <Button size="sm" className="glow rounded-full" asChild>
-            <Link to="/demo">
+            <Link to="/" hash="early-access">
               Get early access <ArrowRight className="ml-1 h-3.5 w-3.5" />
             </Link>
           </Button>
@@ -72,7 +72,7 @@ export function SiteHeader() {
                 <Github className="h-4 w-4" /> View on GitHub
               </a>
               <Button size="sm" className="rounded-full" asChild>
-                <Link to="/demo" onClick={() => setOpen(false)}>Get early access</Link>
+                <Link to="/" hash="early-access" onClick={() => setOpen(false)}>Get early access</Link>
               </Button>
             </div>
           </nav>
