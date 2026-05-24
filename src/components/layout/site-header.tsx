@@ -49,6 +49,15 @@ export function SiteHeader() {
             </>
           ) : (
             <>
+              <a
+                href="https://github.com/dockier"
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+                aria-label="View on GitHub"
+              >
+                <Github className="h-4 w-4" />
+              </a>
               <Button asChild variant="ghost" size="sm" className="rounded-full">
                 <Link to="/login">Sign in</Link>
               </Button>
