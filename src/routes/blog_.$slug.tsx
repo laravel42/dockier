@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { PageShell } from "@/components/layout/page-shell";
@@ -23,9 +24,9 @@ function jsxStyleToCss(jsx: string): string {
   });
 }
 
-function renderInline(text: string): React.ReactNode {
+function renderInline(text: string): ReactNode {
   // Inline parser supporting **bold**, `code`, [text](url), *italic*.
-  const nodes: React.ReactNode[] = [];
+  const nodes: ReactNode[] = [];
   const pattern = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)]+\)|\*[^*]+\*)/g;
   let last = 0;
   let m: RegExpExecArray | null;
