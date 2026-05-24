@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/layout/page-shell";
-import { DashboardMockup } from "@/components/marketing/dashboard-mockup";
 import { HowItWorks } from "@/components/marketing/how-it-works";
 import { DxSection } from "@/components/marketing/dx-section";
 import { CtaBand } from "@/components/marketing/cta-band";
@@ -37,9 +36,6 @@ function ProductPage() {
       title={<>The platform you'd build <span className="text-gradient-primary">if you had time.</span></>}
       description="A guided tour through Dockier — from connecting your first repo to deploying a verified commit."
     >
-      <Section>
-        <DashboardMockup />
-      </Section>
       <Section>
         <div className="grid gap-6 lg:grid-cols-3">
           {showcases.map((s) => (
