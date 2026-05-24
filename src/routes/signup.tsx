@@ -28,7 +28,7 @@ function SignupPage() {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/`,
+        emailRedirectTo: `${window.location.origin}/admin`,
         data: { display_name: name },
       },
     });
@@ -43,11 +43,11 @@ function SignupPage() {
 
   const onGoogle = async () => {
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + "/",
+      redirect_uri: window.location.origin + "/admin",
     });
     if (result.error) toast.error("Google sign-up failed");
     if (result.redirected) return;
-    navigate({ to: "/" });
+    navigate({ to: "/admin" });
   };
 
   return (
