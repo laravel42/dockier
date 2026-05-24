@@ -32,7 +32,7 @@ function ContactPage() {
             {[
               { i: Mail, t: "Email", b: site.email },
               { i: Calendar, t: "Book a demo", b: "30-min call with an engineer" },
-              { i: Github, t: "Open source", b: "github.com/dockier" },
+              { i: Github, t: "Open source", b: "github.com/laravel42/dockier" },
             ].map((c) => (
               <div key={c.t} className="rounded-2xl border border-border/50 bg-card/40 p-5 backdrop-blur">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary">
