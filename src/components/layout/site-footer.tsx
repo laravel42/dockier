@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Github } from "lucide-react";
+import { Github, Heart } from "lucide-react";
 import { Logo } from "@/components/marketing/logo";
 import { site } from "@/lib/site";
 
