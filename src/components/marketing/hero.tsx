@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DashboardMockup } from "./dashboard-mockup";
 
 export function Hero() {
   return (
@@ -40,9 +39,6 @@ export function Hero() {
               </a>
             </Button>
           </motion.div>
-        </div>
-        <div className="mt-16 lg:mt-20">
-          <DashboardMockup />
         </div>
       </div>
     </div>
