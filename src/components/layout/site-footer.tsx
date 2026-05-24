@@ -26,7 +26,7 @@ const cols: ReadonlyArray<{ title: string; links: ReadonlyArray<{ label: string;
     title: "Company",
     links: [
       { label: "Contact", to: "/contact" },
-      { label: "Book demo", to: "/contact" },
+      { label: "Book demo", to: "/demo" },
       { label: "Privacy policy", to: "/privacy" },
       { label: "Terms of service", to: "/terms" },
     ],

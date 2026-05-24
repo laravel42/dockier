@@ -20,6 +20,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as DocsRouteImport } from './routes/docs'
+import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as ChangelogRouteImport } from './routes/changelog'
@@ -82,6 +83,11 @@ const DocsRoute = DocsRouteImport.update({
   path: '/docs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoRoute = DemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -119,6 +125,7 @@ export interface FileRoutesByFullPath {
   '/changelog': typeof ChangelogRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
+  '/demo': typeof DemoRoute
   '/docs': typeof DocsRoute
   '/features': typeof FeaturesRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/changelog': typeof ChangelogRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
+  '/demo': typeof DemoRoute
   '/docs': typeof DocsRoute
   '/features': typeof FeaturesRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/changelog': typeof ChangelogRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
+  '/demo': typeof DemoRoute
   '/docs': typeof DocsRoute
   '/features': typeof FeaturesRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare'
     | '/contact'
+    | '/demo'
     | '/docs'
     | '/features'
     | '/forgot-password'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare'
     | '/contact'
+    | '/demo'
     | '/docs'
     | '/features'
     | '/forgot-password'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare'
     | '/contact'
+    | '/demo'
     | '/docs'
     | '/features'
     | '/forgot-password'
@@ -237,6 +249,7 @@ export interface RootRouteChildren {
   ChangelogRoute: typeof ChangelogRoute
   CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
+  DemoRoute: typeof DemoRoute
   DocsRoute: typeof DocsRoute
   FeaturesRoute: typeof FeaturesRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
@@ -330,6 +343,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -381,6 +401,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogRoute: ChangelogRoute,
   CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
+  DemoRoute: DemoRoute,
   DocsRoute: DocsRoute,
   FeaturesRoute: FeaturesRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
