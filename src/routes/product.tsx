@@ -11,6 +11,10 @@ export const Route = createFileRoute("/product")({
       path: "/product",
     title: "Product tour — Dockier",
     description: "A guided tour of Dockier — from connecting a repo, through AI-powered scans, to shipping a verified commit to AWS or GCP.",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Product", path: "/product" },
+    ],
   }),
   component: ProductPage,
 });
