@@ -150,7 +150,7 @@ export const pricing = [
       "OSV.dev dependency scanning",
       "Community support",
     ],
-    cta: "Start free",
+    cta: "Get early access",
     highlight: false,
   },
   {
@@ -166,7 +166,7 @@ export const pricing = [
       "Jira, Linear, Slack integrations",
       "RBAC + 2FA",
     ],
-    cta: "Start 14-day trial",
+    cta: "Get early access",
     highlight: true,
   },
   {
@@ -182,7 +182,7 @@ export const pricing = [
       "Custom rule packs",
       "Dedicated support + SLA",
     ],
-    cta: "Contact sales",
+    cta: "Get early access",
     highlight: false,
   },
 ] as const;
