@@ -5,7 +5,7 @@ import { Section } from "@/components/primitives/section";
 import { pageHead } from "@/lib/seo";
 import { getPostBySlug, blogPosts } from "@/lib/blog";
 
-export const Route = createFileRoute("/blog/$slug")({
+export const Route = createFileRoute("/blog_/$slug")({
   head: ({ params }) => {
     const post = params?.slug ? getPostBySlug(params.slug) : undefined;
     return pageHead({
