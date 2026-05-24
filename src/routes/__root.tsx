@@ -73,16 +73,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Dockier — AI-native DevSecOps platform" },
-      { name: "description", content: "Connect repositories, scan vulnerabilities, analyze architecture with AI, and ship secure code faster. Secure. Analyze. Deploy." },
       { name: "author", content: "Dockier" },
-      { property: "og:title", content: "Dockier — AI-native DevSecOps platform" },
-      { property: "og:description", content: "Connect repositories, scan vulnerabilities, analyze architecture with AI, and ship secure code faster. Secure. Analyze. Deploy." },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Dockier" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@dockier" },
-      { name: "twitter:title", content: "Dockier — AI-native DevSecOps platform" },
-      { name: "twitter:description", content: "Connect repositories, scan vulnerabilities, analyze architecture with AI, and ship secure code faster. Secure. Analyze. Deploy." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/55820cb8-9cf3-4160-adb0-38b74dc92698" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/55820cb8-9cf3-4160-adb0-38b74dc92698" },
     ],
@@ -96,6 +91,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&display=swap",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              name: "Dockier",
+              url: "https://dockier.dev",
+              logo: "https://dockier.dev/favicon.ico",
+              sameAs: ["https://twitter.com/dockier"],
+            },
+            {
+              "@type": "WebSite",
+              name: "Dockier",
+              url: "https://dockier.dev",
+            },
+          ],
+        }),
       },
     ],
   }),

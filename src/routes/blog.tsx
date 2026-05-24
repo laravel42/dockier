@@ -5,9 +5,28 @@ import { pageHead } from "@/lib/seo";
 import { blogPosts } from "@/lib/blog";
 
 export const Route = createFileRoute("/blog")({
-  head: () => pageHead({
-    title: "Blog — Dockier",
-    description: "Engineering, security research, and product updates from the Dockier team.",
+  head: () => ({
+    ...pageHead({
+      title: "Blog — Dockier",
+      description: "Engineering, security research, and product updates from the Dockier team.",
+    }),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          name: "Dockier Blog",
+          url: "https://dockier.dev/blog",
+          blogPost: blogPosts.map((p) => ({
+            "@type": "BlogPosting",
+            headline: p.title,
+            datePublished: p.date,
+            url: `https://dockier.dev/blog/${p.slug}`,
+          })),
+        }),
+      },
+    ],
   }),
   component: BlogPage,
 });
