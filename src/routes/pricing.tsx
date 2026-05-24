@@ -16,8 +16,9 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     ...pageHead({
+      path: "/pricing",
       title: "Pricing — Dockier",
-      description: "Free for OSS, Pro for teams, Enterprise for security-critical orgs. Simple plans built to scale.",
+      description: "Free for OSS and personal projects. Pro for teams that ship. Enterprise for security-critical orgs. Transparent pricing, no hidden scan fees.",
     }),
     scripts: [
       {

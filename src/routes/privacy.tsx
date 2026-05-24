@@ -5,8 +5,9 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/privacy")({
   head: () => pageHead({
+      path: "/privacy",
     title: "Privacy Policy — Dockier",
-    description: "How Dockier collects, uses, and protects your data.",
+    description: "How Dockier collects, processes, stores, and protects your personal data. GDPR-aligned and updated regularly.",
   }),
   component: PrivacyPage,
 });

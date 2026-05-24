@@ -12,8 +12,9 @@ import { site } from "@/lib/site";
 
 export const Route = createFileRoute("/contact")({
   head: () => pageHead({
-    title: "Contact & Demo — Dockier",
-    description: "Talk to our team. Book a demo. Get early access.",
+      path: "/contact",
+    title: "Contact — Dockier",
+    description: "Talk to the Dockier team. Ask product questions, get help with onboarding, or just say hi — we answer within one business day.",
   }),
   component: ContactPage,
 });

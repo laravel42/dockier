@@ -8,8 +8,9 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/product")({
   head: () => pageHead({
+      path: "/product",
     title: "Product tour — Dockier",
-    description: "See how Dockier connects your repositories, runs AI-powered scans, and ships verified commits to production.",
+    description: "A guided tour of Dockier — from connecting a repo, through AI-powered scans, to shipping a verified commit to AWS or GCP.",
   }),
   component: ProductPage,
 });

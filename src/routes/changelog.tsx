@@ -5,8 +5,9 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/changelog")({
   head: () => pageHead({
+      path: "/changelog",
     title: "Changelog — Dockier",
-    description: "Every release, every week. New features, fixes, and platform updates.",
+    description: "Every Dockier release, every week. New features, bug fixes, security updates, and platform improvements — shipped continuously.",
   }),
   component: ChangelogPage,
 });

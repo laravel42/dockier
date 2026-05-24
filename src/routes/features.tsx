@@ -7,8 +7,9 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/features")({
   head: () => pageHead({
+      path: "/features",
     title: "Features — Dockier",
-    description: "Security scanning, AI architecture analysis, sensitive data detection, dependency intelligence, AI remediation, and deployments in one platform.",
+    description: "Security scanning, AI architecture analysis, sensitive-data detection, dependency intelligence, AI remediation, and deployments — one platform.",
   }),
   component: FeaturesPage,
 });

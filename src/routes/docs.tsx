@@ -7,8 +7,9 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/docs")({
   head: () => pageHead({
-    title: "Docs & Resources — Dockier",
-    description: "Documentation, API reference, guides, tutorials, blog, and changelog for the Dockier platform.",
+      path: "/docs",
+    title: "Docs — Dockier",
+    description: "Documentation, API reference, guides, and tutorials for the Dockier platform — written by the engineers who built it.",
   }),
   component: DocsPage,
 });

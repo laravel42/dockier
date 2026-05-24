@@ -15,6 +15,7 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
   head: () => pageHead({
+      path: "/",
     title: "Dockier — AI-native DevSecOps platform",
     description: "Connect repositories, scan vulnerabilities, analyze architecture with AI, and ship secure code from one platform.",
   }),

@@ -21,9 +21,10 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/demo")({
   head: () =>
     pageHead({
+      path: "/demo",
       title: "Request a demo — Dockier",
       description:
-        "See Dockier in action with your team. Book a personalised demo with our engineering team.",
+        "See Dockier in action on your own repositories. Book a 30-minute personalised demo with one of our engineers.",
     }),
   component: DemoPage,
 });
