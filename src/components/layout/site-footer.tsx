@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Github, Twitter } from "lucide-react";
+import { Github } from "lucide-react";
 import { Logo } from "@/components/marketing/logo";
 import { site } from "@/lib/site";
 
@@ -44,9 +44,6 @@ export function SiteFooter() {
             <a href={site.github} aria-label="GitHub" className="text-muted-foreground hover:text-foreground">
               <Github className="h-5 w-5" />
             </a>
-            <a href="#" aria-label="Twitter" className="text-muted-foreground hover:text-foreground">
-              <Twitter className="h-5 w-5" />
-            </a>
           </div>
         </div>
         {cols.map((c) => (
@@ -67,7 +64,10 @@ export function SiteFooter() {
       <div className="border-t border-border/40">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
           <p>© {new Date().getFullYear()} Dockier Labs. All rights reserved.</p>
-          <p>Built for engineering teams who ship.</p>
+          <div className="flex items-center gap-4">
+            <Link to="/privacy" className="hover:text-foreground">Privacy policy</Link>
+            <Link to="/terms" className="hover:text-foreground">Terms of service</Link>
+          </div>
         </div>
       </div>
     </footer>
