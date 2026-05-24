@@ -35,9 +35,9 @@ export function SiteHeader() {
             <Github className="h-4 w-4" />
           </a>
           <Button size="sm" className="glow rounded-full" asChild>
-            <a href="#early-access">
+            <Link to="/demo">
               Get early access <ArrowRight className="ml-1 h-3.5 w-3.5" />
-            </a>
+            </Link>
           </Button>
         </div>
         <button
