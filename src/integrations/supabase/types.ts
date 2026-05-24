@@ -14,36 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      cloud_providers: {
-        Row: {
-          connected: boolean
-          created_at: string
-          id: string
-          kind: string
-          name: string
-          region: string | null
-          updated_at: string
-        }
-        Insert: {
-          connected?: boolean
-          created_at?: string
-          id?: string
-          kind: string
-          name: string
-          region?: string | null
-          updated_at?: string
-        }
-        Update: {
-          connected?: boolean
-          created_at?: string
-          id?: string
-          kind?: string
-          name?: string
-          region?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -67,63 +37,6 @@ export type Database = {
           display_name?: string | null
           email?: string | null
           id?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      source_connections: {
-        Row: {
-          account: string | null
-          connected: boolean
-          created_at: string
-          id: string
-          name: string
-          provider: string
-          updated_at: string
-        }
-        Insert: {
-          account?: string | null
-          connected?: boolean
-          created_at?: string
-          id?: string
-          name: string
-          provider: string
-          updated_at?: string
-        }
-        Update: {
-          account?: string | null
-          connected?: boolean
-          created_at?: string
-          id?: string
-          name?: string
-          provider?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      ssh_keys: {
-        Row: {
-          created_at: string
-          fingerprint: string
-          id: string
-          name: string
-          public_key: string | null
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          fingerprint: string
-          id?: string
-          name: string
-          public_key?: string | null
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          fingerprint?: string
-          id?: string
-          name?: string
-          public_key?: string | null
           updated_at?: string
         }
         Relationships: []
