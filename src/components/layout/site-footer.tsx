@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Github } from "lucide-react";
+import { Github, Heart } from "lucide-react";
 import { Logo } from "@/components/marketing/logo";
 import { site } from "@/lib/site";
 
@@ -27,6 +27,8 @@ const cols: ReadonlyArray<{ title: string; links: ReadonlyArray<{ label: string;
     links: [
       { label: "Contact", to: "/contact" },
       { label: "Book demo", to: "/contact" },
+      { label: "Privacy policy", to: "/privacy" },
+      { label: "Terms of service", to: "/terms" },
     ],
   },
 ];
@@ -64,10 +66,12 @@ export function SiteFooter() {
       <div className="border-t border-border/40">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
           <p>© {new Date().getFullYear()} Dockier Labs. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <Link to="/privacy" className="hover:text-foreground">Privacy policy</Link>
-            <Link to="/terms" className="hover:text-foreground">Terms of service</Link>
-          </div>
+          <p className="flex items-center gap-1">
+            Made with <Heart className="h-3 w-3 text-red-500" fill="currentColor" /> by{" "}
+            <a href="https://laravel42.com" target="_blank" rel="noreferrer" className="hover:text-foreground underline">
+              Laravel42
+            </a>
+          </p>
         </div>
       </div>
     </footer>
