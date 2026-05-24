@@ -3,7 +3,6 @@ import { ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
 const emailSchema = z
@@ -44,26 +43,33 @@ export function WaitlistForm({
     }
 
     setStatus("loading");
-    const userAgent = typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 512) : null;
-    const { error } = await supabase
-      .from("waitlist_leads")
-      .insert({ email: parsed.data, source, user_agent: userAgent });
-
-    if (error) {
-      // Unique violation = already on the list, still a success from user POV
-      if (error.code === "23505") {
-        setStatus("success");
-        setMessage("You're already on the list — we'll be in touch.");
+    try {
+      const res = await fetch("/api/public/waitlist-signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: parsed.data, source }),
+      });
+      const json = (await res.json().catch(() => ({}))) as {
+        success?: boolean;
+        alreadyExists?: boolean;
+        error?: string;
+      };
+      if (!res.ok || !json.success) {
+        setStatus("error");
+        setMessage(json.error ?? "Something went wrong. Please try again.");
         return;
       }
+      setStatus("success");
+      setMessage(
+        json.alreadyExists
+          ? "You're already on the list — we'll be in touch."
+          : "You're on the list — check your inbox for a confirmation.",
+      );
+      setEmail("");
+    } catch {
       setStatus("error");
-      setMessage("Something went wrong. Please try again.");
-      return;
+      setMessage("Network error. Please try again.");
     }
-
-    setStatus("success");
-    setMessage("You're on the list — we'll be in touch shortly.");
-    setEmail("");
   }
 
   if (status === "success") {
