@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { WaitlistForm } from "./waitlist-form";
 
 export function Hero() {
   return (
@@ -31,13 +30,12 @@ export function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="mt-8 flex flex-wrap items-center justify-center gap-4"
+            className="mt-8 flex flex-col items-center justify-center gap-3"
           >
-            <Button size="lg" className="glow h-14 px-8 text-lg" asChild>
-              <a href="#early-access">
-                Get early access <ArrowRight className="ml-2 h-5 w-5" />
-              </a>
-            </Button>
+            <WaitlistForm source="hero" size="lg" />
+            <p className="text-xs text-muted-foreground">
+              Join the waitlist — no credit card, no spam.
+            </p>
           </motion.div>
         </div>
       </div>
