@@ -34,7 +34,7 @@ export function Hero() {
           >
             <WaitlistForm source="hero" size="lg" />
             <p className="text-xs text-muted-foreground">
-              Join the waitlist — no credit card, no spam.
+              We'll only email you about your seat. No marketing.
             </p>
           </motion.div>
         </div>
