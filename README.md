@@ -2,7 +2,7 @@
 
 > AI-native DevSecOps for modern engineering teams.
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-coming%20soon-orange.svg)]()
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript)](https://www.typescriptlang.org)
@@ -144,7 +144,7 @@ We welcome contributions! Please open an issue or submit a pull request.
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the GNU General Public License v3.0. See `LICENSE` for more information.
 
 ---
 
