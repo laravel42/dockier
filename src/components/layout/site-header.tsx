@@ -72,7 +72,7 @@ export function SiteHeader() {
                 <Github className="h-4 w-4" /> View on GitHub
               </a>
               <Button size="sm" className="rounded-full" asChild>
-                <a href="#early-access" onClick={() => setOpen(false)}>Get early access</a>
+                <Link to="/demo" onClick={() => setOpen(false)}>Get early access</Link>
               </Button>
             </div>
           </nav>
