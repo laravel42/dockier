@@ -174,7 +174,7 @@ function BlogPostPage() {
           </Link>
 
           <article className="mt-8 space-y-6">
-            {post.content.map((block, idx) => renderBlock(block, idx))}
+            {post.content.map((block: string, idx: number) => renderBlock(block, idx))}
           </article>
 
           {related.length > 0 && (
