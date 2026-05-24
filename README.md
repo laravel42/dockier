@@ -4,6 +4,8 @@
 
 [![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-coming%20soon-orange.svg)]()
+[![CI](https://img.shields.io/github/actions/workflow/status/laravel42/dockier/ci.yml?branch=main&label=ci&style=flat-square&logo=github)](https://github.com/laravel42/dockier/actions)
+[![Codecov](https://img.shields.io/codecov/c/github/laravel42/dockier?logo=codecov&style=flat-square)](https://codecov.io/gh/laravel42/dockier)
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript)](https://www.typescriptlang.org)
 
