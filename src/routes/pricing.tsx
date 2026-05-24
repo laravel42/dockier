@@ -3,16 +3,6 @@ import { PageShell } from "@/components/layout/page-shell";
 import { PricingCards } from "@/components/marketing/pricing-cards";
 import { CtaBand } from "@/components/marketing/cta-band";
 import { Section, SectionHeading } from "@/components/primitives/section";
-import { pageHead } from "@/lib/seo";
-
-export const Route = createFileRoute("/pricing")({
-  head: () => pageHead({
-    title: "Pricing — Dockier",
-    description: "Free for OSS, Pro for teams, Enterprise for security-critical orgs. Simple plans built to scale.",
-  }),
-  component: PricingPage,
-});
-
 const faqs = [
   { q: "Is there a free plan?", a: "Yes. Free forever for personal projects, with 3 repositories and 100 scans per month." },
   { q: "Can I self-host Dockier?", a: "Yes. Pro and Enterprise plans support fully self-hosted deployments on your own infrastructure." },
@@ -20,6 +10,32 @@ const faqs = [
   { q: "Do you offer SSO/SAML?", a: "SSO via SAML and OIDC is included on the Enterprise plan, along with audit logs and SOC 2 Type II reports." },
   { q: "Which providers do you support for deploys?", a: "AWS and GCP today. Azure and bare-metal Kubernetes are on the roadmap." },
 ];
+
+import { pageHead } from "@/lib/seo";
+
+export const Route = createFileRoute("/pricing")({
+  head: () => ({
+    ...pageHead({
+      title: "Pricing — Dockier",
+      description: "Free for OSS, Pro for teams, Enterprise for security-critical orgs. Simple plans built to scale.",
+    }),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
+    ],
+  }),
+  component: PricingPage,
+});
 
 function PricingPage() {
   return (
