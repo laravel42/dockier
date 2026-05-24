@@ -27,12 +27,12 @@ export function DxSection() {
             align="left"
             eyebrow="Developer experience"
             title={<>Built API-first by engineers, <span className="text-gradient-primary">for engineers.</span></>}
-            description="Microservices on Encore.ts. React + Tailwind frontend. OpenAI under the hood. Self-hosted or fully managed — your call."
+            description="Microservices on FastAPI. React + Tailwind frontend. OpenAI under the hood. Self-hosted or fully managed — your call."
           />
           <ul className="mt-6 grid grid-cols-2 gap-3 text-sm">
             {[
               "API-first architecture",
-              "Encore.ts microservices",
+              "FastAPI microservices",
               "Self-hostable",
               "OpenAI gpt-5.4-mini",
               "Webhooks for everything",
