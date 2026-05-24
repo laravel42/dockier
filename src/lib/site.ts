@@ -160,7 +160,7 @@ export const pricing = [
     blurb: "Growing teams shipping production software.",
     features: [
       "Unlimited repositories",
-      "Unlimited scans",
+      "1000 scans / month",
       "AI analysis + remediation (5k credits)",
       "AWS + GCP deployments",
       "Jira, Linear, Slack integrations",
