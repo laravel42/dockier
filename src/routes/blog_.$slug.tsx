@@ -8,10 +8,36 @@ import { getPostBySlug, blogPosts } from "@/lib/blog";
 export const Route = createFileRoute("/blog_/$slug")({
   head: ({ params }) => {
     const post = params?.slug ? getPostBySlug(params.slug) : undefined;
-    return pageHead({
+    const slug = params?.slug ?? "";
+    const base = pageHead({
       title: post ? `${post.title} — Dockier blog` : "Blog — Dockier",
       description: post?.excerpt ?? "Dockier blog post.",
+      path: `/blog/${slug}`,
+      ogType: "article",
     });
+    if (!post) return base;
+    return {
+      ...base,
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: post.title,
+            description: post.excerpt,
+            author: { "@type": "Person", name: post.author },
+            datePublished: post.date,
+            publisher: {
+              "@type": "Organization",
+              name: "Dockier",
+              url: "https://dockier.dev",
+            },
+            mainEntityOfPage: `https://dockier.dev/blog/${slug}`,
+          }),
+        },
+      ],
+    };
   },
   loader: ({ params }) => {
     const post = getPostBySlug(params.slug);
