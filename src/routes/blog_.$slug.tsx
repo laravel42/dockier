@@ -1,9 +1,116 @@
+import type { ReactNode } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { PageShell } from "@/components/layout/page-shell";
 import { Section } from "@/components/primitives/section";
 import { pageHead } from "@/lib/seo";
 import { getPostBySlug, blogPosts } from "@/lib/blog";
+
+function jsxStyleToCss(jsx: string): string {
+  // Convert `style={{ fontSize: "0.8rem", color: "#a89c8a" }}` → style="font-size:0.8rem;color:#a89c8a"
+  return jsx.replace(/style=\{\{([^}]+)\}\}/g, (_m, body: string) => {
+    const css = body
+      .split(",")
+      .map((pair) => {
+        const [rawK, ...rest] = pair.split(":");
+        if (!rawK || rest.length === 0) return "";
+        const k = rawK.trim().replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+        const v = rest.join(":").trim().replace(/^["']|["']$/g, "");
+        return `${k}:${v}`;
+      })
+      .filter(Boolean)
+      .join(";");
+    return `style="${css}"`;
+  });
+}
+
+function renderInline(text: string): ReactNode {
+  // Inline parser supporting **bold**, `code`, [text](url), *italic*.
+  const nodes: ReactNode[] = [];
+  const pattern = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)]+\)|\*[^*]+\*)/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  let key = 0;
+  while ((m = pattern.exec(text)) !== null) {
+    if (m.index > last) nodes.push(text.slice(last, m.index));
+    const t = m[0];
+    if (t.startsWith("**")) {
+      nodes.push(<strong key={key++} className="font-semibold text-foreground">{t.slice(2, -2)}</strong>);
+    } else if (t.startsWith("`")) {
+      nodes.push(<code key={key++} className="rounded bg-muted/60 px-1.5 py-0.5 font-mono text-[0.85em]">{t.slice(1, -1)}</code>);
+    } else if (t.startsWith("[")) {
+      const lm = t.match(/^\[([^\]]+)\]\(([^)]+)\)$/)!;
+      nodes.push(
+        <a key={key++} href={lm[2]} className="text-primary underline-offset-4 hover:underline" target="_blank" rel="noreferrer">
+          {lm[1]}
+        </a>
+      );
+    } else {
+      nodes.push(<em key={key++}>{t.slice(1, -1)}</em>);
+    }
+    last = m.index + t.length;
+  }
+  if (last < text.length) nodes.push(text.slice(last));
+  return nodes;
+}
+
+function renderBlock(block: string, idx: number) {
+  if (block.startsWith("<figure")) {
+    return (
+      <figure
+        key={idx}
+        className="my-2 overflow-hidden rounded-xl border border-border/50 [&_svg]:h-auto [&_svg]:w-full"
+        dangerouslySetInnerHTML={{ __html: jsxStyleToCss(block).replace(/^<figure>?/, "<div>").replace(/<\/figure>$/, "</div>") }}
+      />
+    );
+  }
+  if (block.startsWith("```")) {
+    const lines = block.split("\n");
+    const code = lines.slice(1, -1).join("\n");
+    return (
+      <pre key={idx} className="overflow-x-auto rounded-xl border border-border/50 bg-card/60 p-4 text-sm leading-relaxed">
+        <code className="font-mono text-foreground/90">{code}</code>
+      </pre>
+    );
+  }
+  if (block.startsWith("### ")) {
+    return (
+      <h3 key={idx} className="font-display text-lg font-semibold text-foreground sm:text-xl">
+        {renderInline(block.slice(4))}
+      </h3>
+    );
+  }
+  if (block.startsWith("## ")) {
+    return (
+      <h2 key={idx} className="font-display text-xl font-semibold text-foreground sm:text-2xl">
+        {renderInline(block.slice(3))}
+      </h2>
+    );
+  }
+  if (block.startsWith("> ")) {
+    return (
+      <blockquote
+        key={idx}
+        className="border-l-2 border-primary/50 pl-4 text-base italic leading-relaxed text-muted-foreground sm:text-lg"
+      >
+        {renderInline(block.slice(2))}
+      </blockquote>
+    );
+  }
+  if (block.startsWith("- ")) {
+    const items = block.split("\n").map((l) => l.replace(/^- /, ""));
+    return (
+      <ul key={idx} className="list-disc space-y-2 pl-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
+        {items.map((it, i) => <li key={i}>{renderInline(it)}</li>)}
+      </ul>
+    );
+  }
+  return (
+    <p key={idx} className="text-base leading-relaxed text-muted-foreground sm:text-lg">
+      {renderInline(block)}
+    </p>
+  );
+}
 
 export const Route = createFileRoute("/blog_/$slug")({
   head: ({ params }) => {
@@ -68,44 +175,7 @@ function BlogPostPage() {
           </Link>
 
           <article className="mt-8 space-y-6">
-            {post.content.map((block: string, idx: number) => {
-              if (block.startsWith("### ")) {
-                return (
-                  <h3 key={idx} className="font-display text-lg font-semibold text-foreground sm:text-xl">
-                    {block.slice(4)}
-                  </h3>
-                );
-              }
-              if (block.startsWith("## ")) {
-                return (
-                  <h2 key={idx} className="font-display text-xl font-semibold text-foreground sm:text-2xl">
-                    {block.slice(3)}
-                  </h2>
-                );
-              }
-              if (block.startsWith("> ")) {
-                return (
-                  <blockquote
-                    key={idx}
-                    className="border-l-2 border-primary/50 pl-4 text-base italic leading-relaxed text-muted-foreground sm:text-lg"
-                  >
-                    {block.slice(2)}
-                  </blockquote>
-                );
-              }
-              if (block.startsWith("- ")) {
-                return (
-                  <ul key={idx} className="list-disc pl-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
-                    <li>{block.slice(2)}</li>
-                  </ul>
-                );
-              }
-              return (
-                <p key={idx} className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  {block}
-                </p>
-              );
-            })}
+            {post.content.map((block: string, idx: number) => renderBlock(block, idx))}
           </article>
 
           {related.length > 0 && (
