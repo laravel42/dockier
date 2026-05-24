@@ -26,6 +26,7 @@ import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app/index'
@@ -123,6 +124,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -194,7 +200,7 @@ const AuthenticatedAppProjectsProjectIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
@@ -211,6 +217,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/app/deploy': typeof AuthenticatedAppDeployRoute
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/projects': typeof AuthenticatedAppProjectsRouteWithChildren
@@ -224,7 +231,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
@@ -240,6 +247,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/app/deploy': typeof AuthenticatedAppDeployRoute
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/settings': typeof AuthenticatedAppSettingsRoute
@@ -253,7 +261,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
@@ -270,6 +278,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/_authenticated/app/deploy': typeof AuthenticatedAppDeployRoute
   '/_authenticated/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/_authenticated/app/projects': typeof AuthenticatedAppProjectsRouteWithChildren
@@ -302,6 +311,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/app'
     | '/dashboard'
+    | '/blog/$slug'
     | '/app/deploy'
     | '/app/notifications'
     | '/app/projects'
@@ -331,6 +341,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/terms'
     | '/dashboard'
+    | '/blog/$slug'
     | '/app/deploy'
     | '/app/notifications'
     | '/app/settings'
@@ -360,6 +371,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/_authenticated/app'
     | '/_authenticated/dashboard'
+    | '/blog/$slug'
     | '/_authenticated/app/deploy'
     | '/_authenticated/app/notifications'
     | '/_authenticated/app/projects'
@@ -375,7 +387,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  BlogRoute: typeof BlogRoute
+  BlogRoute: typeof BlogRouteWithChildren
   ChangelogRoute: typeof ChangelogRoute
   CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
@@ -512,6 +524,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -668,10 +687,20 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  BlogRoute: BlogRoute,
+  BlogRoute: BlogRouteWithChildren,
   ChangelogRoute: ChangelogRoute,
   CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
