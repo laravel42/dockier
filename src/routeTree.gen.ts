@@ -24,6 +24,7 @@ import { Route as DocsRouteImport } from './routes/docs'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompareRouteImport } from './routes/compare'
+import { Route as ChangelogDotxmlRouteImport } from './routes/changelog[.]xml'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -115,6 +116,11 @@ const CompareRoute = CompareRouteImport.update({
   path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChangelogDotxmlRoute = ChangelogDotxmlRouteImport.update({
+  id: '/changelog.xml',
+  path: '/changelog.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChangelogRoute = ChangelogRouteImport.update({
   id: '/changelog',
   path: '/changelog',
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRoute
   '/changelog': typeof ChangelogRoute
+  '/changelog.xml': typeof ChangelogDotxmlRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/blog': typeof BlogRoute
   '/changelog': typeof ChangelogRoute
+  '/changelog.xml': typeof ChangelogDotxmlRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
@@ -263,6 +271,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRoute
   '/changelog': typeof ChangelogRoute
+  '/changelog.xml': typeof ChangelogDotxmlRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
@@ -297,6 +306,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/changelog'
+    | '/changelog.xml'
     | '/compare'
     | '/contact'
     | '/demo'
@@ -328,6 +338,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blog'
     | '/changelog'
+    | '/changelog.xml'
     | '/compare'
     | '/contact'
     | '/demo'
@@ -360,6 +371,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/changelog'
+    | '/changelog.xml'
     | '/compare'
     | '/contact'
     | '/demo'
@@ -393,6 +405,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   BlogRoute: typeof BlogRoute
   ChangelogRoute: typeof ChangelogRoute
+  ChangelogDotxmlRoute: typeof ChangelogDotxmlRoute
   CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
   DemoRoute: typeof DemoRoute
@@ -525,6 +538,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/changelog.xml': {
+      id: '/changelog.xml'
+      path: '/changelog.xml'
+      fullPath: '/changelog.xml'
+      preLoaderRoute: typeof ChangelogDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/changelog': {
       id: '/changelog'
       path: '/changelog'
@@ -652,6 +672,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   BlogRoute: BlogRoute,
   ChangelogRoute: ChangelogRoute,
+  ChangelogDotxmlRoute: ChangelogDotxmlRoute,
   CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
   DemoRoute: DemoRoute,
