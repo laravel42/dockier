@@ -10,6 +10,10 @@ export const Route = createFileRoute("/features")({
       path: "/features",
     title: "Features — Dockier",
     description: "Security scanning, AI architecture analysis, sensitive-data detection, dependency intelligence, AI remediation, and deployments — one platform.",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Features", path: "/features" },
+    ],
   }),
   component: FeaturesPage,
 });
