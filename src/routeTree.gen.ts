@@ -32,6 +32,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as BlogSlugRouteImport } from './routes/blog_.$slug'
 import { Route as AdminWaitlistRouteImport } from './routes/admin.waitlist'
+import { Route as AdminDemoRequestsRouteImport } from './routes/admin.demo-requests'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicWaitlistSignupRouteImport } from './routes/api/public/waitlist-signup'
 import { Route as ApiPublicDemoRequestRouteImport } from './routes/api/public/demo-request'
@@ -154,6 +155,11 @@ const AdminWaitlistRoute = AdminWaitlistRouteImport.update({
   path: '/waitlist',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminDemoRequestsRoute = AdminDemoRequestsRouteImport.update({
+  id: '/demo-requests',
+  path: '/demo-requests',
+  getParentRoute: () => AdminRoute,
+} as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -208,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/admin/demo-requests': typeof AdminDemoRequestsRoute
   '/admin/waitlist': typeof AdminWaitlistRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -238,6 +245,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/admin/demo-requests': typeof AdminDemoRequestsRoute
   '/admin/waitlist': typeof AdminWaitlistRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -270,6 +278,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/admin/demo-requests': typeof AdminDemoRequestsRoute
   '/admin/waitlist': typeof AdminWaitlistRoute
   '/blog_/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -303,6 +312,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/terms'
+    | '/admin/demo-requests'
     | '/admin/waitlist'
     | '/blog/$slug'
     | '/email/unsubscribe'
@@ -333,6 +343,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/terms'
+    | '/admin/demo-requests'
     | '/admin/waitlist'
     | '/blog/$slug'
     | '/email/unsubscribe'
@@ -364,6 +375,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/terms'
+    | '/admin/demo-requests'
     | '/admin/waitlist'
     | '/blog_/$slug'
     | '/email/unsubscribe'
@@ -569,6 +581,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminWaitlistRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/demo-requests': {
+      id: '/admin/demo-requests'
+      path: '/demo-requests'
+      fullPath: '/admin/demo-requests'
+      preLoaderRoute: typeof AdminDemoRequestsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -615,11 +634,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminDemoRequestsRoute: typeof AdminDemoRequestsRoute
   AdminWaitlistRoute: typeof AdminWaitlistRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminDemoRequestsRoute: AdminDemoRequestsRoute,
   AdminWaitlistRoute: AdminWaitlistRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
