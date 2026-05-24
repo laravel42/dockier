@@ -44,9 +44,6 @@ export function SiteFooter() {
             <a href={site.github} aria-label="GitHub" className="text-muted-foreground hover:text-foreground">
               <Github className="h-5 w-5" />
             </a>
-            <a href="#" aria-label="Twitter" className="text-muted-foreground hover:text-foreground">
-              <Twitter className="h-5 w-5" />
-            </a>
           </div>
         </div>
         {cols.map((c) => (
