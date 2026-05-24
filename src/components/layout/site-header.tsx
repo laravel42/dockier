@@ -1,23 +1,12 @@
 import { useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Github, LayoutDashboard, LogOut, Menu, X } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight, Github, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/marketing/logo";
 import { nav } from "@/lib/site";
-import { useAuth } from "@/hooks/use-auth";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  const onSignOut = async () => {
-    await supabase.auth.signOut();
-    toast.success("Signed out");
-    navigate({ to: "/" });
-  };
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4">
@@ -36,35 +25,20 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="hidden items-center gap-2 md:flex">
-          {user ? (
-            <>
-              <Button asChild variant="ghost" size="sm" className="rounded-full">
-                <Link to="/app">
-                  <LayoutDashboard className="h-3.5 w-3.5" /> Dashboard
-                </Link>
-              </Button>
-              <Button variant="outline" size="sm" className="rounded-full" onClick={onSignOut}>
-                <LogOut className="h-3.5 w-3.5" /> Sign out
-              </Button>
-            </>
-          ) : (
-            <>
-              <a
-                href="https://github.com/laravel42/dockier"
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
-                aria-label="View on GitHub"
-              >
-                <Github className="h-4 w-4" />
-              </a>
-              <Button size="sm" className="glow rounded-full" asChild>
-                <a href="#early-access">
-                  Get early access <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                </a>
-              </Button>
-            </>
-          )}
+          <a
+            href="https://github.com/laravel42/dockier"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+            aria-label="View on GitHub"
+          >
+            <Github className="h-4 w-4" />
+          </a>
+          <Button size="sm" className="glow rounded-full" asChild>
+            <a href="#early-access">
+              Get early access <ArrowRight className="ml-1 h-3.5 w-3.5" />
+            </a>
+          </Button>
         </div>
         <button
           className="ml-auto rounded-full p-2 md:hidden"
@@ -88,31 +62,18 @@ export function SiteHeader() {
               </Link>
             ))}
             <div className="mt-3 flex flex-col gap-2">
-              {user ? (
-                <>
-                  <Button asChild variant="outline" size="sm" className="rounded-full">
-                    <Link to="/app" onClick={() => setOpen(false)}>Dashboard</Link>
-                  </Button>
-                  <Button size="sm" className="rounded-full" onClick={() => { setOpen(false); onSignOut(); }}>
-                    Sign out
-                  </Button>
-                </>
-              ) : (
-              <>
-                <a
-                  href="https://github.com/laravel42/dockier"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-                  onClick={() => setOpen(false)}
-                >
-                  <Github className="h-4 w-4" /> View on GitHub
-                </a>
-                <Button size="sm" className="rounded-full" asChild>
-                  <a href="#early-access" onClick={() => setOpen(false)}>Get early access</a>
-                </Button>
-              </>
-              )}
+              <a
+                href="https://github.com/laravel42/dockier"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                onClick={() => setOpen(false)}
+              >
+                <Github className="h-4 w-4" /> View on GitHub
+              </a>
+              <Button size="sm" className="rounded-full" asChild>
+                <a href="#early-access" onClick={() => setOpen(false)}>Get early access</a>
+              </Button>
             </div>
           </nav>
         </div>
