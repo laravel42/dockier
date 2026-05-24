@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Calendar, Video } from "lucide-react";
+import { Check, Calendar, Video, Loader2 } from "lucide-react";
 import { PageShell } from "@/components/layout/page-shell";
 import { Section } from "@/components/primitives/section";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { pageHead } from "@/lib/seo";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/demo")({
   head: () =>
@@ -46,11 +47,51 @@ const repoOptions = [
 function DemoPage() {
   const [submitted, setSubmitted] = useState(false);
   const [selectedRepos, setSelectedRepos] = useState<string[]>([]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [teamSize, setTeamSize] = useState<string>("");
+  const [useCase, setUseCase] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const toggleRepo = (id: string) => {
     setSelectedRepos((prev) =>
       prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]
     );
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/public/demo-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          company,
+          teamSize: teamSize || null,
+          repoIntegrations: selectedRepos,
+          useCase,
+          source: "/demo",
+        }),
+      });
+      const json = (await res.json().catch(() => ({}))) as {
+        success?: boolean;
+        error?: string;
+      };
+      if (!res.ok || !json.success) {
+        toast.error(json.error ?? "Could not submit. Please try again.");
+        return;
+      }
+      setSubmitted(true);
+    } catch {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -99,10 +140,7 @@ function DemoPage() {
 
           {/* Form */}
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setSubmitted(true);
-            }}
+            onSubmit={handleSubmit}
             className="rounded-2xl border border-border/50 bg-card/40 p-6 backdrop-blur lg:col-span-2"
           >
             {submitted ? (
@@ -126,6 +164,9 @@ function DemoPage() {
                     <Input
                       id="name"
                       required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      maxLength={120}
                       className="mt-1.5 bg-background/60"
                       placeholder="Ada Lovelace"
                     />
@@ -136,6 +177,9 @@ function DemoPage() {
                       id="email"
                       type="email"
                       required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      maxLength={255}
                       className="mt-1.5 bg-background/60"
                       placeholder="ada@company.com"
                     />
@@ -145,13 +189,16 @@ function DemoPage() {
                     <Input
                       id="company"
                       required
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      maxLength={200}
                       className="mt-1.5 bg-background/60"
                       placeholder="Acme Inc."
                     />
                   </div>
                   <div>
                     <Label htmlFor="team-size">Team size</Label>
-                    <Select required>
+                    <Select value={teamSize} onValueChange={setTeamSize} required>
                       <SelectTrigger
                         id="team-size"
                         className="mt-1.5 bg-background/60"
@@ -197,6 +244,9 @@ function DemoPage() {
                       id="use-case"
                       rows={4}
                       required
+                      value={useCase}
+                      onChange={(e) => setUseCase(e.target.value)}
+                      maxLength={4000}
                       className="mt-1.5 bg-background/60"
                       placeholder="We're migrating from legacy security tools and need a unified platform that covers SAST, dependency scanning, and deployment in one place..."
                     />
@@ -206,8 +256,16 @@ function DemoPage() {
                   type="submit"
                   size="lg"
                   className="mt-5 w-full glow sm:w-auto"
+                  disabled={submitting}
                 >
-                  Request demo
+                  {submitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Submitting…
+                    </>
+                  ) : (
+                    "Request demo"
+                  )}
                 </Button>
               </>
             )}
