@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
 import {
   createFileRoute,
   Link,
   Outlet,
+  redirect,
   useNavigate,
   useRouterState,
 } from "@tanstack/react-router";
-import { BarChart3, Users, Mail, LogOut, Loader2 } from "lucide-react";
+import { BarChart3, Users, Mail, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -20,10 +20,21 @@ export const Route = createFileRoute("/admin")({
       { name: "googlebot", content: "noindex, nofollow" },
     ],
   }),
+  beforeLoad: async () => {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData.user) {
+      throw redirect({ to: "/login" });
+    }
+    const { data: roleRow } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userData.user.id)
+      .eq("role", "admin")
+      .maybeSingle();
+    return { isAdmin: Boolean(roleRow) };
+  },
   component: AdminLayout,
 });
-
-type AuthState = "loading" | "unauthorized" | "ok";
 
 const navItems = [
   { to: "/admin", label: "Overview", icon: BarChart3, exact: true },
@@ -33,35 +44,8 @@ const navItems = [
 
 function AdminLayout() {
   const navigate = useNavigate();
-  const [state, setState] = useState<AuthState>("loading");
+  const { isAdmin } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-
-  useEffect(() => {
-    let active = true;
-    const check = async () => {
-      const { data: sessionData } = await supabase.auth.getSession();
-      if (!sessionData.session) {
-        if (active) navigate({ to: "/login" });
-        return;
-      }
-      const { data, error } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", sessionData.session.user.id)
-        .eq("role", "admin")
-        .maybeSingle();
-      if (!active) return;
-      if (error || !data) {
-        setState("unauthorized");
-        return;
-      }
-      setState("ok");
-    };
-    check();
-    return () => {
-      active = false;
-    };
-  }, [navigate]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -69,15 +53,7 @@ function AdminLayout() {
     navigate({ to: "/login" });
   };
 
-  if (state === "loading") {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
-
-  if (state === "unauthorized") {
+  if (!isAdmin) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <div className="max-w-md rounded-2xl border border-border/60 bg-card/60 p-8 text-center backdrop-blur">
