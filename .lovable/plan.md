@@ -1,107 +1,123 @@
-## Porting the dashboard into Dockier
 
-The uploaded archive is a full React Router v7 SPA (~195 files, 11 pages, contexts, sidebar layout, scan/deploy/project detail screens, settings tabs, deploy wizard with codemirror). Embedding it as-is would clash with the marketing site (notably the existing `/security` route) and bring in a parallel auth/theming/router stack. The plan is a clean port, not a copy-paste.
+# Dockier SEO upgrade plan
 
-### 1. Routing & namespace
+Scope: the 21 findings in section **1. SEO & Technical SEO** of the audit, plus the SEO-adjacent new findings F#151, F#152, F#159. Sequenced by impact × effort. Resolved items (F#1, F#2, F#3) are excluded.
 
-Mount the entire dashboard under `/app/*` so it never collides with marketing routes (`/security`, `/pricing`, etc.):
+---
 
-```text
-src/routes/
-  _authenticated.tsx                 (existing guard — keep)
-  _authenticated/
-    app.tsx                          layout with sidebar + topbar
-    app/
-      index.tsx                       → /app  (overview)
-      notifications.tsx               → /app/notifications
-      projects.tsx                    → /app/projects
-      projects.$projectId.tsx         → /app/projects/:id
-      security.tsx                    → /app/security
-      security.$scanId.tsx            → /app/security/:scanId
-      deploy.tsx                      → /app/deploy
-      deploy.$deployId.tsx            → /app/deploy/:id
-      settings.tsx                    → /app/settings (tabs layout)
-```
+## Phase 1 — Crawl & indexation fundamentals (≈1 day)
 
-The current placeholder `/dashboard` redirects to `/app`. Header "Dashboard" link points to `/app`.
+The foundation. Without these, every other SEO effort under-delivers.
 
-### 2. Replace the parallel stacks
+1. **Canonical tags on every leaf route** (F#4)
+   - Extend `src/lib/seo.ts › pageHead()` to accept a `path` and emit `<link rel="canonical" href="https://dockier.dev{path}">`.
+   - Add only on leaves — never in `__root.tsx` (TanStack concatenates `links`, so a root canonical would duplicate).
+   - Pass `path` from each route's `head()`.
 
-| Source dashboard | Replaced by |
+2. **`og:url` site-wide** (F#6)
+   - Same `pageHead()` helper emits `<meta property="og:url" content="https://dockier.dev{path}">`.
+
+3. **Fix `pageHead()` clobbering `og:image`** (F#5)
+   - Either keep `og:image` only in `__root.tsx` (it merges via meta dedupe), or move it into `pageHead()` with a per-route override.
+
+4. **Self-host OG image + per-route variants** (F#7, F#151)
+   - Ship `/public/og-default.png` (1200×630) baked into the repo.
+   - Generate per-route OG images for `/demo`, `/privacy`, `/terms`, `/pricing`, `/features`, `/compare`, top blog posts. Use `@vercel/og`-style templated PNG generation in a server route.
+
+5. **Favicon set + manifest + theme-color** (F#8, F#9)
+   - Generate full set: 16/32/192/512 PNG, SVG, apple-touch-icon, maskable.
+   - Declare in `__root.tsx › links`. Add `manifest.webmanifest`.
+   - Add `<meta name="theme-color" content="#221c16">`.
+
+6. **Add blog posts to sitemap** (F#152)
+   - In `src/routes/sitemap[.]xml.ts`, walk `src/lib/blog.ts` and emit one `<url>` per slug with the post date as `lastmod`.
+
+---
+
+## Phase 2 — Structured data (≈1 day)
+
+Highest ROI for rich results.
+
+7. **Root: Organization + WebSite JSON-LD** (F#11)
+   - The current `__root.tsx` already has one — verify it includes `logo`, `sameAs`, `potentialAction` (SearchAction on WebSite if applicable).
+
+8. **Pricing: FAQPage JSON-LD** (F#12)
+   - `pricing.tsx` already iterates a `faqs` array — already done per current code. Verify it's still present and complete.
+
+9. **Home: SoftwareApplication / Product JSON-LD** (F#11)
+   - Emit on `/` with `name`, `applicationCategory: "DeveloperApplication"`, `offers` (link to /pricing).
+
+10. **Blog posts: Article JSON-LD** (F#11, F#16)
+    - In `src/routes/blog_.$slug.tsx`, emit Article with `headline`, `datePublished`, `author`, `image` (per-post OG).
+
+11. **Compare: BreadcrumbList + per-competitor anchors** (F#13)
+    - Add `#dockier-vs-snyk`, `#dockier-vs-github-advanced-security`, `#dockier-vs-sonarqube`, `#dockier-vs-gitlab` anchors with H2s for long-tail.
+    - Emit BreadcrumbList JSON-LD: Home → Compare.
+
+12. **Interior pages: BreadcrumbList** (F#13)
+    - Same on `/features`, `/pricing`, `/security`, `/product`.
+
+---
+
+## Phase 3 — On-page content & metadata polish (≈half-day)
+
+13. **Unique 150–160 char meta descriptions per page** (F#20)
+    - Rewrite descriptions in each route's `pageHead()` so no two pages share boilerplate.
+
+14. **Standardize title format** (F#19)
+    - Pick one: `{Page} — Dockier` (em-dash). Update `/compare` to match.
+
+15. **Add per-competitor sections to `/compare`** (F#13)
+    - Each section: 2–3 paragraph comparison with a "when to choose X" note. Cite competitor product pages (also resolves F#52 trust concern).
+
+---
+
+## Phase 4 — Internal linking & content surface (≈half-day)
+
+16. **Hub-and-spoke linking from `/pricing` and `/compare`** (F#18)
+    - Add contextual inline links: feature names link to `/features#capability`, comparison rows link to the matching feature page.
+    - Add "See AI remediation in action →" cross-links between Features → Product, Compare → Pricing.
+
+17. **Replace PNG mark with inline SVG** (F#159, mirror of F#69)
+    - Inline `dockier-mark.svg`; remove the modulepreload `<link rel="preload" as="image">` for the PNG.
+
+18. **Changelog RSS or remove the promise** (F#17)
+    - Add `src/routes/changelog[.]xml.ts` emitting RSS 2.0, and `<link rel="alternate" type="application/rss+xml">` in changelog's `head()`.
+    - Cheapest: remove the "Subscribe via RSS" line.
+
+---
+
+## Phase 5 — Niceties (≈XS each)
+
+19. **`og:locale=en_US`, document hreflang policy** (F#10)
+20. **Document em-dash + title convention** in `CONTRIBUTING.md` (F#145, F#19)
+
+---
+
+## Out of scope (covered elsewhere in the audit)
+
+- Lead-form wiring (F#98, F#99) — CRO, but the most urgent business item per the audit's bottom line.
+- Stats strip fabrication (F#46) — trust, not SEO.
+- FastAPI vs Encore narrative (F#49, F#153) — content consistency.
+
+These should be triaged in parallel; they don't belong in the SEO plan but they affect whether SEO traffic converts.
+
+---
+
+## Suggested execution order
+
+| Day | Work |
 |---|---|
-| `react-router-dom` `<Link>`, `useNavigate`, `useParams` | `@tanstack/react-router` equivalents |
-| `AuthContext` | existing `useAuth` hook + Supabase session |
-| `ThemeContext` (light/dark toggle) | site already dark-first; expose a toggle via `next-themes` later if needed (out of scope here) |
-| `PermissionsContext` | thin pass-through hook returning `true` for now (server enforcement TBD) |
-| `Layout.tsx` + `Sidebar.tsx` + `Toolbar.tsx` | shadcn `Sidebar` (`SidebarProvider`, `SidebarTrigger`, collapsible icon mode) wired to TanStack `Link` + `useRouterState` |
+| 1 | Phase 1 (canonical, og:url, og:image merge, favicons, sitemap blog posts) |
+| 2 | Phase 1 OG image generator + Phase 2 (JSON-LD: Organization, SoftwareApplication, Article, FAQPage, BreadcrumbList) |
+| 3 | Phase 3 + Phase 4 (descriptions, titles, /compare sections, internal links, SVG mark) |
+| 4 | Phase 5 + RSS feed + verify in Search Console (request indexation, check rich-result eligibility) |
 
-### 3. Re-skin to the marketing system
+Total: ~4 working days for one engineer.
 
-- Drop the dashboard's `index.css` `@theme` block. All tokens come from `src/styles.css` (background, primary cyan/teal, surface, severity, gradient-primary, shadow-elegant).
-- Replace ad-hoc `bg-card`, `text-text-secondary`, `border-border` color names with the site's semantic tokens (`bg-card`, `text-muted-foreground`, `border-border` already match — minimal renaming).
-- Fonts: keep Space Grotesk display + Inter Tight body (already loaded). Drop Fraunces references.
-- Swap primitives:
-  - `<button>` → `Button` (variants: default, outline, ghost, destructive)
-  - cards → `Card`, `CardHeader`, `CardContent`
-  - badges → `Badge` (with `severity` variant added)
-  - tabs (Settings, ScanDetail) → `Tabs` from shadcn
-  - modals (FixWithAI, CreateIssue, ConfirmModal) → `Dialog`
-  - selects/comboboxes → `Select` / `Command`
-- Rebuild `SeverityBadge`, `TechBadge`, `ProviderBadge`, `PlatformBadge`, `SourceControlBadge` on top of `Badge` with severity color tokens (`--sev-critical`, `--sev-high`, …).
+## Technical notes
 
-### 4. Heavy dependencies
-
-Install these as part of the port:
-- `@xyflow/react` — used by the deploy graph view
-- `@uiw/react-md-editor` + `prismjs` — markdown editor in scan/findings
-- `@codemirror/*` + `react-simple-code-editor` — env vars / compose editor in DeployWizard
-
-If any of these turn out to be SSR-incompatible they'll be lazy-loaded with `React.lazy` + a client-only wrapper.
-
-### 5. Data layer
-
-The original app calls a backend that doesn't exist here. To keep the port runnable:
-- All pages start with mock fixtures defined alongside the component (e.g. `src/features/dashboard/fixtures/projects.ts`).
-- A thin `src/features/dashboard/api.ts` exposes typed functions returning the fixtures via `Promise.resolve(...)`. Replacing fixtures with real Supabase queries later only touches that file.
-- No new database schema in this pass.
-
-### 6. Folder layout in this project
-
-```text
-src/features/dashboard/
-  layout/
-    AppSidebar.tsx
-    AppTopbar.tsx
-  components/
-    SeverityBadge.tsx, TechBadge.tsx, ProviderBadge.tsx, ...
-  pages/
-    Overview.tsx, Projects.tsx, ProjectDetail.tsx,
-    Security.tsx, ScanDetail.tsx,
-    Deploy.tsx, DeployDetail.tsx,
-    Notifications.tsx, Settings.tsx,
-    settings/{Profile,Users,Roles,Providers,Integrations,SourceControl,SshKeys,Security,SecurityRules,NotificationChannels}Tab.tsx
-  fixtures/
-    projects.ts, scans.ts, deploys.ts, users.ts, integrations.ts
-  api.ts
-```
-
-Route files in `src/routes/_authenticated/app/*` stay tiny — they just import from `src/features/dashboard/pages` and set `head()` metadata.
-
-### 7. Out of scope (this pass)
-
-- Real backend wiring (kept on fixtures so the UI is interactive end-to-end).
-- DeployWizard's full step flow with live env detection — port the shell and "review/deploy" step; the wizard's environment detection that hits a backend stays mocked.
-- Light-mode parity — the marketing site is dark-first; dashboard renders dark-only for now.
-- Realtime / websocket scan progress.
-
-### 8. Sequencing
-
-1. Add `/app` route shell + sidebar/topbar (shadcn `Sidebar`), redirect `/dashboard` → `/app`.
-2. Port primitives (badges, severity, tech, provider) onto shadcn `Badge` + tokens.
-3. Port pages in this order: Overview → Projects (+ detail) → Security (+ scan detail) → Deploy (+ detail) → Notifications → Settings (with all tabs).
-4. Install heavy deps (`@xyflow/react`, codemirror, md-editor) only when their consuming page is being ported.
-5. Verify each ported page renders at its `/app/...` URL with auth guard active.
-
-### Why this scope
-
-A faithful port of 195 source files re-skinned to shadcn is multi-thousand-line work. I'll execute it page-by-page across follow-up turns rather than one giant patch, so you can review and steer each section. This plan locks the architecture (routing, primitives, fixture data) so nothing has to be redone later.
+- TanStack Router merges `meta` by name/property but **concatenates `links`** — keep canonical on leaves only.
+- OG image generation should run as a TanStack server route under `/api/og/*` returning `image/png`. Cache aggressively via `Cache-Control: public, max-age=31536000, immutable` keyed by path hash.
+- Use `head: ({ loaderData }) => ...` for dynamic routes (blog posts) so Article JSON-LD pulls real post data.
+- After shipping, trigger an SEO rescan in the SEO & AI search tab and submit the sitemap in Google Search Console.

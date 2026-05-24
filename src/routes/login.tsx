@@ -10,7 +10,8 @@ import { toast } from "sonner";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/login")({
-  head: () => pageHead({ title: "Sign in — Dockier", description: "Sign in to your Dockier account." }),
+  head: () => pageHead({
+      path: "/login", title: "Sign in — Dockier", description: "Sign in to your Dockier account to manage repositories, scans, and deployments." }),
   component: LoginPage,
 });
 

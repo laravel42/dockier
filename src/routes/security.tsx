@@ -7,8 +7,9 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/security")({
   head: () => pageHead({
-    title: "Security & Trust — Dockier",
-    description: "Encryption at rest and in transit, RBAC, audit logging, secret management, and SOC 2 Type II.",
+      path: "/security",
+    title: "Security — Dockier",
+    description: "Encryption at rest and in transit, RBAC, scoped secret management, tamper-evident audit logs, and third-party penetration-tested infrastructure.",
   }),
   component: SecurityPage,
 });

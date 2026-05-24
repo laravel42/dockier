@@ -8,7 +8,8 @@ import { toast } from "sonner";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/reset-password")({
-  head: () => pageHead({ title: "Set new password — Dockier", description: "Choose a new password for your Dockier account." }),
+  head: () => pageHead({
+      path: "/reset-password", title: "Set new password — Dockier", description: "Choose a new password for your Dockier account." }),
   component: ResetPage,
 });
 

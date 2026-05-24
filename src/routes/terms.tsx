@@ -5,8 +5,9 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/terms")({
   head: () => pageHead({
+      path: "/terms",
     title: "Terms of Service — Dockier",
-    description: "The terms and conditions governing your use of the Dockier platform.",
+    description: "The terms governing your use of the Dockier platform — acceptable use, service levels, data ownership, and liability.",
   }),
   component: TermsPage,
 });

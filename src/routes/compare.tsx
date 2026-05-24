@@ -7,8 +7,9 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/compare")({
   head: () => pageHead({
-    title: "Compare — Dockier vs Snyk, GitHub AS, SonarQube, GitLab",
-    description: "How Dockier compares to Snyk, GitHub Advanced Security, SonarQube, and GitLab Security.",
+      path: "/compare",
+    title: "Compare — Dockier",
+    description: "How Dockier stacks up against Snyk, GitHub Advanced Security, SonarQube, and GitLab Security — feature by feature, refreshed quarterly.",
   }),
   component: ComparePage,
 });

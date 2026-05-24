@@ -14,9 +14,32 @@ import { Section, SectionHeading } from "@/components/primitives/section";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
-  head: () => pageHead({
-    title: "Dockier — AI-native DevSecOps platform",
-    description: "Connect repositories, scan vulnerabilities, analyze architecture with AI, and ship secure code from one platform.",
+  head: () => ({
+    ...pageHead({
+      path: "/",
+      title: "Dockier — AI-native DevSecOps platform",
+      description: "Connect repositories, scan vulnerabilities, analyze architecture with AI, and ship secure code from one platform.",
+    }),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: "Dockier",
+          applicationCategory: "DeveloperApplication",
+          operatingSystem: "Web",
+          description:
+            "AI-native DevSecOps platform. Connect repos, scan vulnerabilities, analyse architecture with AI, and ship secure code.",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+            url: "https://dockier.dev/pricing",
+          },
+        }),
+      },
+    ],
   }),
   component: Landing,
 });

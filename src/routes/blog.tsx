@@ -7,8 +7,9 @@ import { blogPosts } from "@/lib/blog";
 export const Route = createFileRoute("/blog")({
   head: () => ({
     ...pageHead({
+      path: "/blog",
       title: "Blog — Dockier",
-      description: "Engineering, security research, and product updates from the Dockier team.",
+      description: "Engineering deep-dives, security research, and product updates from the team building Dockier.",
     }),
     scripts: [
       {
