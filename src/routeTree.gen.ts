@@ -30,6 +30,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as BlogSlugRouteImport } from './routes/blog_.$slug'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
+import { Route as ApiPublicWaitlistSignupRouteImport } from './routes/api/public/waitlist-signup'
 import { Route as ApiPublicDemoRequestRouteImport } from './routes/api/public/demo-request'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -140,6 +141,11 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicWaitlistSignupRoute = ApiPublicWaitlistSignupRouteImport.update({
+  id: '/api/public/waitlist-signup',
+  path: '/api/public/waitlist-signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicDemoRequestRoute = ApiPublicDemoRequestRouteImport.update({
   id: '/api/public/demo-request',
   path: '/api/public/demo-request',
@@ -186,6 +192,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/api/public/demo-request': typeof ApiPublicDemoRequestRoute
+  '/api/public/waitlist-signup': typeof ApiPublicWaitlistSignupRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -213,6 +220,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/api/public/demo-request': typeof ApiPublicDemoRequestRoute
+  '/api/public/waitlist-signup': typeof ApiPublicWaitlistSignupRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -241,6 +249,7 @@ export interface FileRoutesById {
   '/blog_/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/api/public/demo-request': typeof ApiPublicDemoRequestRoute
+  '/api/public/waitlist-signup': typeof ApiPublicWaitlistSignupRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -270,6 +279,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/email/unsubscribe'
     | '/api/public/demo-request'
+    | '/api/public/waitlist-signup'
     | '/lovable/email/suppression'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
@@ -297,6 +307,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/email/unsubscribe'
     | '/api/public/demo-request'
+    | '/api/public/waitlist-signup'
     | '/lovable/email/suppression'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
@@ -324,6 +335,7 @@ export interface FileRouteTypes {
     | '/blog_/$slug'
     | '/email/unsubscribe'
     | '/api/public/demo-request'
+    | '/api/public/waitlist-signup'
     | '/lovable/email/suppression'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
@@ -352,6 +364,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   ApiPublicDemoRequestRoute: typeof ApiPublicDemoRequestRoute
+  ApiPublicWaitlistSignupRoute: typeof ApiPublicWaitlistSignupRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -507,6 +520,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/waitlist-signup': {
+      id: '/api/public/waitlist-signup'
+      path: '/api/public/waitlist-signup'
+      fullPath: '/api/public/waitlist-signup'
+      preLoaderRoute: typeof ApiPublicWaitlistSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/demo-request': {
       id: '/api/public/demo-request'
       path: '/api/public/demo-request'
@@ -560,6 +580,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   ApiPublicDemoRequestRoute: ApiPublicDemoRequestRoute,
+  ApiPublicWaitlistSignupRoute: ApiPublicWaitlistSignupRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
