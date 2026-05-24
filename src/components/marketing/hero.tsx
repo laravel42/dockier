@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DashboardMockup } from "./dashboard-mockup";
 
@@ -39,11 +39,6 @@ export function Hero() {
               <Link to="/contact">
                 Start free <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
-            </Button>
-            <Button asChild size="lg" variant="ghost">
-              <a href="https://github.com/dockier" target="_blank" rel="noreferrer">
-                <Github className="h-4 w-4" /> View on GitHub
-              </a>
             </Button>
           </motion.div>
           <p className="mt-4 text-xs text-muted-foreground">
