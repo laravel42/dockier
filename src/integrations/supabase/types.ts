@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_email_allowlist: {
+        Row: {
+          created_at: string
+          email: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+        }
+        Relationships: []
+      }
+      demo_requests: {
+        Row: {
+          company: string
+          created_at: string
+          email: string
+          id: string
+          name: string
+          repo_integrations: string[] | null
+          source: string | null
+          status: string
+          team_size: string | null
+          updated_at: string
+          use_case: string
+          user_agent: string | null
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          repo_integrations?: string[] | null
+          source?: string | null
+          status?: string
+          team_size?: string | null
+          updated_at?: string
+          use_case: string
+          user_agent?: string | null
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          repo_integrations?: string[] | null
+          source?: string | null
+          status?: string
+          team_size?: string | null
+          updated_at?: string
+          use_case?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string
