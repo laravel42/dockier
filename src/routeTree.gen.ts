@@ -28,6 +28,7 @@ import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as BlogSlugRouteImport } from './routes/blog_.$slug'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
@@ -132,6 +133,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
@@ -178,7 +184,7 @@ const LovableEmailQueueProcessRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRoute
   '/changelog': typeof ChangelogRoute
   '/compare': typeof CompareRoute
@@ -198,6 +204,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/public/demo-request': typeof ApiPublicDemoRequestRoute
   '/api/public/waitlist-signup': typeof ApiPublicWaitlistSignupRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -207,7 +214,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/blog': typeof BlogRoute
   '/changelog': typeof ChangelogRoute
   '/compare': typeof CompareRoute
@@ -227,6 +233,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/admin': typeof AdminIndexRoute
   '/api/public/demo-request': typeof ApiPublicDemoRequestRoute
   '/api/public/waitlist-signup': typeof ApiPublicWaitlistSignupRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -237,7 +244,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRoute
   '/changelog': typeof ChangelogRoute
   '/compare': typeof CompareRoute
@@ -257,6 +264,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/blog_/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/public/demo-request': typeof ApiPublicDemoRequestRoute
   '/api/public/waitlist-signup': typeof ApiPublicWaitlistSignupRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -288,6 +296,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/blog/$slug'
     | '/email/unsubscribe'
+    | '/admin/'
     | '/api/public/demo-request'
     | '/api/public/waitlist-signup'
     | '/lovable/email/suppression'
@@ -297,7 +306,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/blog'
     | '/changelog'
     | '/compare'
@@ -317,6 +325,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/blog/$slug'
     | '/email/unsubscribe'
+    | '/admin'
     | '/api/public/demo-request'
     | '/api/public/waitlist-signup'
     | '/lovable/email/suppression'
@@ -346,6 +355,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/blog_/$slug'
     | '/email/unsubscribe'
+    | '/admin/'
     | '/api/public/demo-request'
     | '/api/public/waitlist-signup'
     | '/lovable/email/suppression'
@@ -356,7 +366,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   BlogRoute: typeof BlogRoute
   ChangelogRoute: typeof ChangelogRoute
   CompareRoute: typeof CompareRoute
@@ -519,6 +529,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
       path: '/email/unsubscribe'
@@ -578,9 +595,19 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   BlogRoute: BlogRoute,
   ChangelogRoute: ChangelogRoute,
   CompareRoute: CompareRoute,
