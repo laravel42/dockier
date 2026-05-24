@@ -194,7 +194,7 @@ function AddConnectionDialog({
             <Input
               value={repoUrl}
               onChange={(e) => setRepoUrl(e.target.value)}
-              placeholder="https://github.com/dockier/edge-gateway"
+              placeholder="https://github.com/laravel42/dockier/edge-gateway"
             />
           </div>
           <div className="space-y-1.5">

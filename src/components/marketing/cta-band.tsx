@@ -41,7 +41,7 @@ export function CtaBand() {
             <Link to="/contact">Book a demo</Link>
           </Button>
           <Button asChild variant="ghost" size="sm">
-            <a href="https://github.com/dockier" target="_blank" rel="noreferrer">
+            <a href="https://github.com/laravel42/dockier" target="_blank" rel="noreferrer">
               <Github className="h-4 w-4" /> Star on GitHub
             </a>
           </Button>

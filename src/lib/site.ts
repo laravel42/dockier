@@ -14,7 +14,7 @@ export const site = {
   description:
     "AI-native DevSecOps for modern engineering teams. Connect repos, scan vulnerabilities, analyze architecture with AI, and ship secure code faster.",
   url: "https://dockier.dev",
-  github: "https://github.com/dockier",
+  github: "https://github.com/laravel42/dockier",
   email: "hello@dockier.dev",
 };
 

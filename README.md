@@ -81,7 +81,7 @@ Branch-based deploys to AWS and GCP with full history, docker image tracking, an
 
 ```bash
 # Clone the repository
-git clone https://github.com/dockier/dockier.git
+git clone https://github.com/laravel42/dockier.git
 cd dockier
 
 # Install dependencies

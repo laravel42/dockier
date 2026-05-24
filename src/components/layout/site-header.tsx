@@ -50,7 +50,7 @@ export function SiteHeader() {
           ) : (
             <>
               <a
-                href="https://github.com/dockier"
+                href="https://github.com/laravel42/dockier"
                 target="_blank"
                 rel="noreferrer"
                 className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
@@ -103,7 +103,7 @@ export function SiteHeader() {
               ) : (
                 <>
                   <a
-                    href="https://github.com/dockier"
+                    href="https://github.com/laravel42/dockier"
                     target="_blank"
                     rel="noreferrer"
                     className="flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted-foreground hover:bg-muted/60 hover:text-foreground"
