@@ -19,6 +19,10 @@ export const Route = createFileRoute("/pricing")({
       path: "/pricing",
       title: "Pricing — Dockier",
       description: "Free for OSS and personal projects. Pro for teams that ship. Enterprise for security-critical orgs. Transparent pricing, no hidden scan fees.",
+      breadcrumbs: [
+        { name: "Home", path: "/" },
+        { name: "Pricing", path: "/pricing" },
+      ],
     }),
     scripts: [
       {
