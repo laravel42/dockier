@@ -9,6 +9,8 @@ type Meta = {
 type LinkTag = {
   rel: string;
   href: string;
+  type?: string;
+  title?: string;
 };
 
 type ScriptTag = {
