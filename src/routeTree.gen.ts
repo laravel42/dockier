@@ -26,9 +26,13 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as BlogSlugRouteImport } from './routes/blog_.$slug'
+import { Route as AdminWaitlistRouteImport } from './routes/admin.waitlist'
+import { Route as AdminDemoRequestsRouteImport } from './routes/admin.demo-requests'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicWaitlistSignupRouteImport } from './routes/api/public/waitlist-signup'
 import { Route as ApiPublicDemoRequestRouteImport } from './routes/api/public/demo-request'
@@ -121,10 +125,20 @@ const BlogRoute = BlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
@@ -135,6 +149,16 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog_/$slug',
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWaitlistRoute = AdminWaitlistRouteImport.update({
+  id: '/waitlist',
+  path: '/waitlist',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDemoRequestsRoute = AdminDemoRequestsRouteImport.update({
+  id: '/demo-requests',
+  path: '/demo-requests',
+  getParentRoute: () => AdminRoute,
 } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
@@ -172,6 +196,7 @@ const LovableEmailQueueProcessRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRoute
   '/changelog': typeof ChangelogRoute
   '/compare': typeof CompareRoute
@@ -189,8 +214,11 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/admin/demo-requests': typeof AdminDemoRequestsRoute
+  '/admin/waitlist': typeof AdminWaitlistRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/public/demo-request': typeof ApiPublicDemoRequestRoute
   '/api/public/waitlist-signup': typeof ApiPublicWaitlistSignupRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -217,8 +245,11 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/admin/demo-requests': typeof AdminDemoRequestsRoute
+  '/admin/waitlist': typeof AdminWaitlistRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/admin': typeof AdminIndexRoute
   '/api/public/demo-request': typeof ApiPublicDemoRequestRoute
   '/api/public/waitlist-signup': typeof ApiPublicWaitlistSignupRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -229,6 +260,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRoute
   '/changelog': typeof ChangelogRoute
   '/compare': typeof CompareRoute
@@ -246,8 +278,11 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/admin/demo-requests': typeof AdminDemoRequestsRoute
+  '/admin/waitlist': typeof AdminWaitlistRoute
   '/blog_/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/public/demo-request': typeof ApiPublicDemoRequestRoute
   '/api/public/waitlist-signup': typeof ApiPublicWaitlistSignupRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -259,6 +294,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/blog'
     | '/changelog'
     | '/compare'
@@ -276,8 +312,11 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/terms'
+    | '/admin/demo-requests'
+    | '/admin/waitlist'
     | '/blog/$slug'
     | '/email/unsubscribe'
+    | '/admin/'
     | '/api/public/demo-request'
     | '/api/public/waitlist-signup'
     | '/lovable/email/suppression'
@@ -304,8 +343,11 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/terms'
+    | '/admin/demo-requests'
+    | '/admin/waitlist'
     | '/blog/$slug'
     | '/email/unsubscribe'
+    | '/admin'
     | '/api/public/demo-request'
     | '/api/public/waitlist-signup'
     | '/lovable/email/suppression'
@@ -315,6 +357,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/blog'
     | '/changelog'
     | '/compare'
@@ -332,8 +375,11 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/terms'
+    | '/admin/demo-requests'
+    | '/admin/waitlist'
     | '/blog_/$slug'
     | '/email/unsubscribe'
+    | '/admin/'
     | '/api/public/demo-request'
     | '/api/public/waitlist-signup'
     | '/lovable/email/suppression'
@@ -344,6 +390,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   BlogRoute: typeof BlogRoute
   ChangelogRoute: typeof ChangelogRoute
   CompareRoute: typeof CompareRoute
@@ -492,12 +539,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
@@ -512,6 +573,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/waitlist': {
+      id: '/admin/waitlist'
+      path: '/waitlist'
+      fullPath: '/admin/waitlist'
+      preLoaderRoute: typeof AdminWaitlistRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/demo-requests': {
+      id: '/admin/demo-requests'
+      path: '/demo-requests'
+      fullPath: '/admin/demo-requests'
+      preLoaderRoute: typeof AdminDemoRequestsRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
@@ -558,8 +633,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminDemoRequestsRoute: typeof AdminDemoRequestsRoute
+  AdminWaitlistRoute: typeof AdminWaitlistRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminDemoRequestsRoute: AdminDemoRequestsRoute,
+  AdminWaitlistRoute: AdminWaitlistRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   BlogRoute: BlogRoute,
   ChangelogRoute: ChangelogRoute,
   CompareRoute: CompareRoute,
