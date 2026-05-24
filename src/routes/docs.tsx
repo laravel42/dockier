@@ -35,8 +35,11 @@ function DocsPage() {
             <Link
               key={c.t}
               to={c.to}
-              className="group rounded-2xl border border-border/50 bg-card/40 p-6 backdrop-blur transition-all hover:border-primary/40"
+              className="group relative rounded-2xl border border-border/50 bg-card/40 p-6 backdrop-blur transition-all hover:border-primary/40"
             >
+              <span className="absolute right-4 top-4 rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                Soon
+              </span>
               <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-primary/30 bg-primary/10 text-primary">
                 <c.i className="h-5 w-5" />
               </div>
