@@ -19,7 +19,7 @@ export const blogPosts: BlogPost[] = [
     "author": "Andrea — Co-founder",
     "readTime": "9 min read",
     "content": [
-      "A few months ago we picked Encore.ts to replace a FastAPI monolith. It was the right call at the time — typed contracts end-to-end, no OpenAPI bridge, zero ceremony. It got us shipping. Then we ran into the limits that always show up around month two: where the framework wants to run, how it wants to deploy, what it wants to own. We migrated to Fastify + Zod + Supabase over six weeks and we are not going back.",
+      "When we set out to replace our FastAPI monolith, we prototyped on Encore.ts first. It was the right call to try — typed contracts end-to-end, no OpenAPI bridge, zero ceremony. It got us moving fast and proved the shape of the API we wanted. Then we ran into the limits that always show up around month two: where the framework wants to run, how it wants to deploy, what it wants to own. We rebuilt on Fastify + Zod + Supabase over six weeks and we are not going back.",
       "This is the migration in honest terms — why we left Encore, why we picked Fastify, and the 47 minutes we broke production the night of the cutover.",
       "> **In the Dockier stack** · Frontend — Vite + React 19 + Tailwind v4 on Cloudflare Pages · Backend — Fastify 5 + TypeScript service modules selected by `SERVICE_NAME` · Auth — Supabase passwordless + JWT (signed with shared `JWT_SECRET`) · Database — Supabase Postgres (single source for app data and migrations) · Background jobs — `pg-boss` on the same Postgres",
       "## The architecture today",
