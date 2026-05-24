@@ -102,6 +102,15 @@ export function SiteHeader() {
                 </>
               ) : (
                 <>
+                  <a
+                    href="https://github.com/dockier"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                    onClick={() => setOpen(false)}
+                  >
+                    <Github className="h-4 w-4" /> View on GitHub
+                  </a>
                   <Button asChild variant="outline" size="sm" className="rounded-full">
                     <Link to="/login" onClick={() => setOpen(false)}>Sign in</Link>
                   </Button>
