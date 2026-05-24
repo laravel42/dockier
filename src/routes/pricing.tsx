@@ -14,8 +14,8 @@ const faqs = [
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/pricing")({
-  head: () => ({
-    ...pageHead({
+  head: () => {
+    const base = pageHead({
       path: "/pricing",
       title: "Pricing — Dockier",
       description: "Free for OSS and personal projects. Pro for teams that ship. Enterprise for security-critical orgs. Transparent pricing, no hidden scan fees.",
@@ -23,22 +23,26 @@ export const Route = createFileRoute("/pricing")({
         { name: "Home", path: "/" },
         { name: "Pricing", path: "/pricing" },
       ],
-    }),
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: faqs.map((f) => ({
-            "@type": "Question",
-            name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.a },
-          })),
-        }),
-      },
-    ],
-  }),
+    });
+    return {
+      ...base,
+      scripts: [
+        ...(base.scripts ?? []),
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqs.map((f) => ({
+              "@type": "Question",
+              name: f.q,
+              acceptedAnswer: { "@type": "Answer", text: f.a },
+            })),
+          }),
+        },
+      ],
+    };
+  },
   component: PricingPage,
 });
 
