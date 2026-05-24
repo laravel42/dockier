@@ -42,7 +42,7 @@ function BlogPostPage() {
           </Link>
 
           <article className="mt-8 space-y-6">
-            {post.content.map((paragraph, idx) => (
+            {post.content.map((paragraph: string, idx: number) => (
               <p key={idx} className="text-base leading-relaxed text-muted-foreground sm:text-lg">
                 {paragraph}
               </p>
