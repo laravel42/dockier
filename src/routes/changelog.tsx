@@ -4,11 +4,25 @@ import { Section } from "@/components/primitives/section";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/changelog")({
-  head: () => pageHead({
+  head: () => {
+    const base = pageHead({
       path: "/changelog",
-    title: "Changelog — Dockier",
-    description: "Every Dockier release, every week. New features, bug fixes, security updates, and platform improvements — shipped continuously.",
-  }),
+      title: "Changelog — Dockier",
+      description: "Every Dockier release, every week. New features, bug fixes, security updates, and platform improvements — shipped continuously.",
+    });
+    return {
+      ...base,
+      links: [
+        ...(base.links ?? []),
+        {
+          rel: "alternate",
+          type: "application/rss+xml",
+          title: "Dockier Changelog RSS",
+          href: "https://dockier.dev/changelog.xml",
+        },
+      ],
+    };
+  },
   component: ChangelogPage,
 });
 
@@ -44,7 +58,15 @@ function ChangelogPage() {
     <PageShell
       eyebrow="Changelog"
       title={<>Shipping <span className="text-gradient-primary">every week.</span></>}
-      description="The platform improves continuously. Subscribe to release notes via RSS."
+      description={
+        <>
+          The platform improves continuously.{" "}
+          <a href="/changelog.xml" className="underline decoration-primary/40 underline-offset-4 hover:decoration-primary">
+            Subscribe via RSS
+          </a>
+          .
+        </>
+      }
     >
       <Section>
         <div className="mx-auto max-w-3xl space-y-6">
