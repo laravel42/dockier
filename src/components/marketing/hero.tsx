@@ -33,17 +33,14 @@ export function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="mt-8 flex flex-wrap items-center justify-center gap-3"
+            className="mt-8 flex flex-wrap items-center justify-center gap-4"
           >
-            <Button asChild size="lg" className="glow">
+            <Button asChild size="lg" className="glow h-14 px-8 text-lg">
               <Link to="/contact">
-                Start free <ArrowRight className="ml-1 h-4 w-4" />
+                Start free <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
           </motion.div>
-          <p className="mt-4 text-xs text-muted-foreground">
-            No credit card · Self-hostable · Free for OSS
-          </p>
         </div>
         <div className="mt-16 lg:mt-20">
           <DashboardMockup />
