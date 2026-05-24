@@ -1,0 +1,1 @@
+DELETE FROM auth.users WHERE email = 'hello@laravel42.com' AND email_confirmed_at IS NULL;
