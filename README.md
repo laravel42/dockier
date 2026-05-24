@@ -35,13 +35,16 @@ Dockier is an AI-powered DevSecOps platform that helps engineering teams secure 
 
 | Layer | Technology |
 |-------|------------|
-| Framework | [TanStack Start](https://tanstack.com/start) (React 19 + Vite) |
+| Frontend | [React 19](https://react.dev), [TanStack Start](https://tanstack.com/start), [Vite](https://vitejs.dev) |
 | Styling | [Tailwind CSS](https://tailwindcss.com) v4 |
 | Components | [shadcn/ui](https://ui.shadcn.com) |
 | State | TanStack Query (server) + Zustand (client) |
-| Backend | Lovable Cloud (PostgreSQL + Auth + Storage) |
-| AI | OpenAI GPT-5.4-mini |
+| API | [FastAPI](https://fastapi.tiangolo.com) (Python microservices) |
+| Database | PostgreSQL via Lovable Cloud |
+| Auth | Lovable Cloud Auth |
+| AI | OpenAI GPT-5.4-mini via Lovable AI Gateway |
 | Scanning | Semgrep, SonarQube, OSV.dev |
+| Deployment | AWS + GCP
 
 ---
 
