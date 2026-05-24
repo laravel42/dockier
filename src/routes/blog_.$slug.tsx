@@ -68,11 +68,44 @@ function BlogPostPage() {
           </Link>
 
           <article className="mt-8 space-y-6">
-            {post.content.map((paragraph: string, idx: number) => (
-              <p key={idx} className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                {paragraph}
-              </p>
-            ))}
+            {post.content.map((block: string, idx: number) => {
+              if (block.startsWith("### ")) {
+                return (
+                  <h3 key={idx} className="font-display text-lg font-semibold text-foreground sm:text-xl">
+                    {block.slice(4)}
+                  </h3>
+                );
+              }
+              if (block.startsWith("## ")) {
+                return (
+                  <h2 key={idx} className="font-display text-xl font-semibold text-foreground sm:text-2xl">
+                    {block.slice(3)}
+                  </h2>
+                );
+              }
+              if (block.startsWith("> ")) {
+                return (
+                  <blockquote
+                    key={idx}
+                    className="border-l-2 border-primary/50 pl-4 text-base italic leading-relaxed text-muted-foreground sm:text-lg"
+                  >
+                    {block.slice(2)}
+                  </blockquote>
+                );
+              }
+              if (block.startsWith("- ")) {
+                return (
+                  <ul key={idx} className="list-disc pl-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
+                    <li>{block.slice(2)}</li>
+                  </ul>
+                );
+              }
+              return (
+                <p key={idx} className="text-base leading-relaxed text-muted-foreground sm:text-lg">
+                  {block}
+                </p>
+              );
+            })}
           </article>
 
           {related.length > 0 && (
