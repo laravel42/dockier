@@ -10,6 +10,10 @@ export const Route = createFileRoute("/security")({
       path: "/security",
     title: "Security — Dockier",
     description: "Encryption at rest and in transit, RBAC, scoped secret management, tamper-evident audit logs, and third-party penetration-tested infrastructure.",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Security", path: "/security" },
+    ],
   }),
   component: SecurityPage,
 });
