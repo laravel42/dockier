@@ -1,0 +1,22 @@
+# Dockier
+
+> AI-native DevSecOps platform: connect repositories, scan vulnerabilities, analyze architecture with AI, and ship secure code from one platform.
+
+## Pages
+
+- [Home](/): Platform overview — security, AI analysis, and deploys unified.
+- [Product](/product): Guided tour from connecting a repo to deploying a verified commit.
+- [Features](/features): Security scanning, AI architecture analysis, sensitive data detection, dependency intelligence, AI remediation, and deployments.
+- [Pricing](/pricing): Free for OSS, Pro for teams, Enterprise for security-critical orgs.
+- [Compare](/compare): How Dockier compares to Snyk, GitHub Advanced Security, SonarQube, and GitLab Security.
+- [Security](/security): Our security posture, SOC 2, and data handling.
+- [Docs](/docs): Product documentation.
+- [Changelog](/changelog): Weekly release notes.
+- [Blog](/blog): Engineering, security research, and product updates.
+- [Contact](/contact): Get in touch.
+- [Demo](/demo): Request a live walkthrough.
+
+## Optional
+
+- [Privacy](/privacy): Privacy policy.
+- [Terms](/terms): Terms of service.
