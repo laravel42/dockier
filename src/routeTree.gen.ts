@@ -13,6 +13,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SecurityRouteImport } from './routes/security'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ProductRouteImport } from './routes/product'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
@@ -55,6 +56,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const ProductRoute = ProductRouteImport.update({
   id: '/product',
   path: '/product',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -191,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/product': typeof ProductRoute
   '/reset-password': typeof ResetPasswordRoute
   '/security': typeof SecurityRoute
@@ -219,6 +226,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/product': typeof ProductRoute
   '/reset-password': typeof ResetPasswordRoute
   '/security': typeof SecurityRoute
@@ -246,6 +254,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/product': typeof ProductRoute
   '/reset-password': typeof ResetPasswordRoute
   '/security': typeof SecurityRoute
@@ -276,6 +285,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/pricing'
+    | '/privacy'
     | '/product'
     | '/reset-password'
     | '/security'
@@ -304,6 +314,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/pricing'
+    | '/privacy'
     | '/product'
     | '/reset-password'
     | '/security'
@@ -330,6 +341,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/pricing'
+    | '/privacy'
     | '/product'
     | '/reset-password'
     | '/security'
@@ -360,6 +372,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProductRoute: typeof ProductRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SecurityRoute: typeof SecurityRoute
@@ -394,6 +407,13 @@ declare module '@tanstack/react-router' {
       path: '/product'
       fullPath: '/product'
       preLoaderRoute: typeof ProductRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -640,6 +660,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
+  PrivacyRoute: PrivacyRoute,
   ProductRoute: ProductRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SecurityRoute: SecurityRoute,
@@ -648,3 +669,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
