@@ -40,9 +40,6 @@ export function Hero() {
                 Start free <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link to="/contact">Book demo</Link>
-            </Button>
             <Button asChild size="lg" variant="ghost">
               <a href="https://github.com/dockier" target="_blank" rel="noreferrer">
                 <Github className="h-4 w-4" /> View on GitHub
