@@ -32,7 +32,7 @@ export function DxSection() {
           <ul className="mt-6 grid grid-cols-2 gap-3 text-sm">
             {[
               "API-first architecture",
-              "Encore.ts microservices",
+              "FastAPI microservices",
               "Self-hostable",
               "OpenAI gpt-5.4-mini",
               "Webhooks for everything",
